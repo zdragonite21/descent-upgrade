@@ -109,6 +109,10 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity += Vector3.down * gravityScale * Time.deltaTime;
         rb.velocity += transform.right * x * leanForce * Time.deltaTime * 0.5f;
 
+        rb.rotation = Quaternion.RotateTowards(transform.rotation, 
+            Quaternion.AngleAxis(-x * Time.deltaTime * 10, transform.forward),
+            Time.deltaTime * 100f);
+
     }
 
 
