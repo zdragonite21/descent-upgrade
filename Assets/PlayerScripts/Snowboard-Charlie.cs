@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Snowboard : MonoBehaviour
+public class SnowboardCharlie : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] float moveSpeed = 20f;
