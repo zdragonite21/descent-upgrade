@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // Gravity
-        rb.velocity += Vector3.down * gravityScale * Time.deltaTime;
+        //
         //rb.velocity += transform.forward * autoSpeed * Time.deltaTime;
 
         m_UpdateHandler?.Invoke();
@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
-
+        rb.velocity += Vector3.down * gravityScale * Time.deltaTime;
         rb.velocity += transform.right * x * leanForce * Time.deltaTime * 0.5f;
 
     }
@@ -119,13 +119,21 @@ public class PlayerMovement : MonoBehaviour
             angle = Vector3.Angle(hitInfo.normal, Vector3.up); // Angle from ground up
 
             directionalForce = gravityScale * Mathf.Abs(Mathf.Sin(angle));
+            transform.up = hitInfo.normal;
         }
 
         // Diagonal Gravity
         rb.velocity += directionalForce * Vector3.down * Time.deltaTime;
 
         // Horizontal "Gravity" to make the player go up slopes
-        rb.velocity += Mathf.Abs(Mathf.Cos(angle)) * transform.forward * Time.deltaTime * autoSpeed;
+        if (Mathf.Sin(angle) < 0)
+        {
+            //print("YO");
+            rb.velocity += Mathf.Abs(Mathf.Cos(angle)) * transform.forward * Time.deltaTime * autoSpeed;
+            //Debug.DrawRay(transform.position, (Mathf.Abs(Mathf.Cos(angle)) * transform.forward * Time.deltaTime * autoSpeed).normalized, Color.red);
+        }
+
+
 
         //print(directionalForce);
     }
