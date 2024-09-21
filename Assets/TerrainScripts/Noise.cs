@@ -36,7 +36,8 @@ public static class Noise {
 
 
 		for (int y = 0; y < mapHeight; y++) {
-			for (int x = 0; x < mapWidth; x++) {
+            float sY = (y - halfWidth - offset.y) / mapHeight * slope;
+            for (int x = 0; x < mapWidth; x++) {
 		
 				amplitude = 1;
 				frequency = 1;
@@ -59,9 +60,7 @@ public static class Noise {
 					minLocalNoiseHeight = noiseHeight;
 				}
 
-                float sX = (x - halfWidth + offset.x) / mapHeight * slope;
-
-                noiseMap[x, y] = noiseHeight + sX;
+                noiseMap[x, y] = noiseHeight + sY;
             }
 		}
 
