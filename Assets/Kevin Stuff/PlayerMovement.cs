@@ -11,6 +11,9 @@ public class PlayerMovement : MonoBehaviour
 
     public float gravityScale;
 
+    public float jumpForce;
+
+    public float rotationAdjustionFactor;
 
     [Header("References")]
     public Grounded playerGrounded;
@@ -90,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            rb.velocity += new Vector3(0f, 2f * gravityScale * 0.7f, 0f);
+            rb.velocity += new Vector3(0f, jumpForce, 0f);
         }
 
     }
@@ -119,8 +122,8 @@ public class PlayerMovement : MonoBehaviour
             angle = Vector3.Angle(hitInfo.normal, Vector3.up); // Angle from ground up
 
             directionalForce = gravityScale * Mathf.Abs(Mathf.Sin(angle));
-            transform.up = hitInfo.normal;
         }
+        transform.up = Vector3.Lerp(transform.up, hitInfo.normal, rotationAdjustionFactor * Time.deltaTime);
 
         // Diagonal Gravity
         rb.velocity += directionalForce * Vector3.down * Time.deltaTime;
