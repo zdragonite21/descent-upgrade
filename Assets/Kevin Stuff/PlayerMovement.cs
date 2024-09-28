@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
 
     public float sideLeanForce;
 
+    public float tiltingFactor;
+
     public float gravityScale;
 
     public float jumpForce;
@@ -96,7 +98,9 @@ public class PlayerMovement : MonoBehaviour
 
         float xVel = rb.velocity.x;
 
-        rb.velocity += transform.forward * Time.deltaTime;
+        rb.velocity += (transform.forward * yInput * forwardLeanForce * Time.deltaTime);
+        rb.velocity += (transform.forward * Time.deltaTime);
+
 
         // Jumps
         if (Input.GetKeyDown(KeyCode.Space))
@@ -110,16 +114,29 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnMidair()
     {
+        rb.AddTorque(transform.up * xInput * tiltingFactor, ForceMode.Impulse);
+
+        rb.AddTorque(transform.right * yInput * tiltingFactor, ForceMode.Impulse);
+
     }
     private void MidairBehavior()
     {
-
+        print("IN AIR");
         rb.velocity += Vector3.down * gravityScale * Time.deltaTime;
         rb.velocity += transform.right * xInput * sideLeanForce * Time.deltaTime * 0.5f;
 
         rb.rotation = Quaternion.RotateTowards(transform.rotation, 
             Quaternion.AngleAxis(-xInput * Time.deltaTime * 10, transform.forward),
             Time.deltaTime * 100f);
+
+        //Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, (Vector3.right * xInput)) * transform.rotation;
+        //transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation,
+        //    Time.fixedDeltaTime * tiltingFactor);
+
+        rb.AddTorque(transform.up * xInput * tiltingFactor * Time.fixedDeltaTime, ForceMode.VelocityChange);
+
+        rb.AddTorque(transform.right * yInput * tiltingFactor * Time.fixedDeltaTime, ForceMode.VelocityChange);
+
 
     }
 
@@ -139,9 +156,9 @@ public class PlayerMovement : MonoBehaviour
 
         //transform.up = Vector3.Lerp(transform.up, hitInfo.normal, rotationAdjustionFactor * Time.deltaTime);
 
-        Quaternion targetRotation = Quaternion.FromToRotation(transform.forward, Vector3.right * xInput) * transform.rotation;
+        Quaternion targetRotation = Quaternion.FromToRotation(transform.forward, (Vector3.right * xInput) + Vector3.forward * Mathf.Abs(xInput)) * transform.rotation;
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation,
-            Time.fixedDeltaTime * 0.5f);
+            Time.fixedDeltaTime * tiltingFactor);
 
         targetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);

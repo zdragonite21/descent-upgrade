@@ -745,8 +745,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96aba85ed58ed884bb21312aa7e9d4bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoSpeed: 14
-  leanForce: 10
+  autoSpeed: 30
+  forwardLeanForce: 1
+  sideLeanForce: 10
+  tiltingFactor: 2
   gravityScale: 10
   jumpForce: 5
   rotationAdjustionFactor: 10
@@ -6940,7 +6942,7 @@ MonoBehaviour:
   IsGrounded: 0
   layerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 64
   playerMovement: {fileID: 418387060}
   cameraMovement: {fileID: 921326019}
 --- !u!1 &1832316036
