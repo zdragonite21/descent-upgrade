@@ -13,14 +13,18 @@ public class Grounded : MonoBehaviour
     public PlayerMovement playerMovement;
     public CameraMovement cameraMovement;
 
+    public BoxCollider groundedCollider;
 
-    private void OnTriggerStay(Collider other)
+    List<Collider> hitColliders = new List<Collider>();
+
+    private void OnTriggerEnter(Collider other)
     {
         if (IsGrounded)
             return;
 
         if (layerMask == (layerMask | (1 << other.gameObject.layer)))
         {
+            hitColliders.Add(other);
             IsGrounded = true;
             playerMovement.CurrentState = PlayerMovement.PlayerState.Grounded;
             cameraMovement.CurrentState = CameraMovement.CameraState.Grounded;
@@ -31,10 +35,25 @@ public class Grounded : MonoBehaviour
     {
         if (layerMask == (layerMask | (1 << other.gameObject.layer)))
         {
+            hitColliders.Clear();
+
             IsGrounded = false;
             playerMovement.CurrentState = PlayerMovement.PlayerState.Midair;
             cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
 
         }
     }
+
+    private void Update()
+    {
+
+        if (hitColliders.Count == 0 && IsGrounded)
+        {
+            IsGrounded = false;
+            playerMovement.CurrentState = PlayerMovement.PlayerState.Midair;
+            cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
+        }
+
+    }
+
 }

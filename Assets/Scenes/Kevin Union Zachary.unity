@@ -749,7 +749,7 @@ MonoBehaviour:
   fasterAutoSpeed: 20
   sideLeanForce: 10
   tiltingFactor: 5
-  gravityScale: 10
+  gravityScale: 20
   jumpForce: 5
   rotationAdjustionFactor: 10
   playerGrounded: {fileID: 1784089203}
@@ -6963,6 +6963,7 @@ MonoBehaviour:
     m_Bits: 64
   playerMovement: {fileID: 418387060}
   cameraMovement: {fileID: 921326019}
+  groundedCollider: {fileID: 1784089202}
 --- !u!1 &1832316036
 GameObject:
   m_ObjectHideFlags: 0
