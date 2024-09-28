@@ -60,7 +60,6 @@ public class EndlessTerrain : MonoBehaviour
         {
             terrainChunkDictionary.Remove(terrainChunksDelete[i].GetCoord());
             terrainChunksDelete[i].Delete();
-            print("Deleted");
         }
         terrainChunksDelete.Clear();
 
@@ -131,6 +130,7 @@ public class EndlessTerrain : MonoBehaviour
             meshFilter = meshObject.AddComponent<MeshFilter>();
             meshCollider = meshObject.AddComponent<MeshCollider>();
             meshRenderer.material = material;
+            meshObject.layer = LayerMask.NameToLayer("Ground");
 
             meshObject.transform.position = positionV3 * scale;
             meshObject.transform.localScale = Vector3.one * scale;
