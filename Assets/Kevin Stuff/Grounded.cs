@@ -29,8 +29,6 @@ public class Grounded : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        
-
         if (layerMask == (layerMask | (1 << other.gameObject.layer)))
         {
             IsGrounded = false;

@@ -2,8 +2,7 @@ using System;
 using System.Collections;
 using System.Runtime.Serialization;
 using UnityEngine;
-using UnityEngine.Windows.WebCam;
-using static System.TimeZoneInfo;
+
 
 public class CameraMovement : MonoBehaviour
 {
@@ -32,10 +31,14 @@ public class CameraMovement : MonoBehaviour
 
     public ParticleSystem speedlines;
 
+    public Animator camAnimator;
+
     private FloatTransition floatTransition = new FloatTransition();
 
 
     public float camSpeed;
+
+    private float timeInAir;
 
     public CameraState CurrentState
     {
@@ -77,7 +80,11 @@ public class CameraMovement : MonoBehaviour
     {
         defaultRotation = transform.rotation;
         transform.position = target.position;
+
+        timeInAir = 0f;
+
         CurrentState = CameraState.Grounded;
+
 
         //floatTransition = new FloatTransition();
     }
@@ -144,7 +151,12 @@ public class CameraMovement : MonoBehaviour
             0.4f
         );
 
-        print("HI");
+        // Camera Shake
+        if (timeInAir >= 1f)
+        {
+            camAnimator.Play("CameraShakeOnLand");
+        }
+        timeInAir = 0f;
     }
 
     private void GroundedBehavior()
@@ -177,6 +189,8 @@ public class CameraMovement : MonoBehaviour
     private void MidairBehavior()
     {
         SmoothMoveWithPlayer();
+
+        timeInAir += Time.fixedDeltaTime;
 
         ChangeSpeedlinesEmission(speedlines.emission.rateOverTime.constant + midairSpeedlinesExtraEmissionCount, 0.2f);
     }

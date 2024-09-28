@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Fields")]
     public float autoSpeed;
 
-    public float leanForce;
+    public float forwardLeanForce;
+
+    public float sideLeanForce;
 
     public float gravityScale;
 
@@ -18,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")]
     public Grounded playerGrounded;
     public Rigidbody rb;
+
+
 
     public PlayerState CurrentState
     {
@@ -59,6 +64,9 @@ public class PlayerMovement : MonoBehaviour
         CurrentState = PlayerState.Midair;
     }
 
+
+    float xInput;
+    float yInput;
     // Update is called once per frame
     void Update()
     {
@@ -66,9 +74,10 @@ public class PlayerMovement : MonoBehaviour
         //
         //rb.velocity += transform.forward * autoSpeed * Time.deltaTime;
 
+        xInput = Input.GetAxisRaw("Horizontal");
+        yInput = Input.GetAxisRaw("Vertical");
         m_UpdateHandler?.Invoke();
     }
-
 
     private void OnGrounded()
     {
@@ -79,22 +88,23 @@ public class PlayerMovement : MonoBehaviour
     {
         print("IN Ground");
         // Get player input for movement
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxisRaw("Vertical");
+
 
 
         SetSlopeSlideVelocity();
-        rb.velocity += transform.right * x * leanForce * Time.deltaTime;
+        rb.velocity += transform.right * xInput * sideLeanForce * Time.deltaTime;
 
         float xVel = rb.velocity.x;
 
         rb.velocity += transform.forward * Time.deltaTime;
 
-
+        // Jumps
         if (Input.GetKeyDown(KeyCode.Space))
         {
             rb.velocity += new Vector3(0f, jumpForce, 0f);
         }
+
+        // Leaning
 
     }
 
@@ -103,14 +113,12 @@ public class PlayerMovement : MonoBehaviour
     }
     private void MidairBehavior()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxisRaw("Vertical");
 
         rb.velocity += Vector3.down * gravityScale * Time.deltaTime;
-        rb.velocity += transform.right * x * leanForce * Time.deltaTime * 0.5f;
+        rb.velocity += transform.right * xInput * sideLeanForce * Time.deltaTime * 0.5f;
 
         rb.rotation = Quaternion.RotateTowards(transform.rotation, 
-            Quaternion.AngleAxis(-x * Time.deltaTime * 10, transform.forward),
+            Quaternion.AngleAxis(-xInput * Time.deltaTime * 10, transform.forward),
             Time.deltaTime * 100f);
 
     }
@@ -126,8 +134,18 @@ public class PlayerMovement : MonoBehaviour
             angle = Vector3.Angle(hitInfo.normal, Vector3.up); // Angle from ground up
 
             directionalForce = gravityScale * Mathf.Abs(Mathf.Sin(angle));
+
         }
-        transform.up = Vector3.Lerp(transform.up, hitInfo.normal, rotationAdjustionFactor * Time.deltaTime);
+
+        //transform.up = Vector3.Lerp(transform.up, hitInfo.normal, rotationAdjustionFactor * Time.deltaTime);
+
+        Quaternion targetRotation = Quaternion.FromToRotation(transform.forward, Vector3.right * xInput) * transform.rotation;
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation,
+            Time.fixedDeltaTime * 0.5f);
+
+        targetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
+
 
         // Diagonal Gravity
         rb.velocity += directionalForce * Vector3.down * Time.deltaTime;
