@@ -6,6 +6,8 @@ public class Scatter : MonoBehaviour
     public List<GameObject> prefabs;
     [Range(0, 1)]
     public float scatterChance = 0.001f;
+    public float globalScale = 1f;
+    public float sinkRand = 100f;
 
     public void ScatterObjects(MeshData meshData, Transform parentTransform)
     {
@@ -30,8 +32,9 @@ public class Scatter : MonoBehaviour
         instance.transform.parent = parentTransform;
 
         // Ensure the instance inherits the parent's transformations
-        instance.transform.localPosition = vertex;
+        instance.transform.localPosition = vertex - Vector3.up * Random.value * sinkRand;
         instance.transform.localRotation = Quaternion.identity;
+        instance.transform.localScale = Vector3.one * globalScale;
         //instance.transform.localScale = Vector3.one;
     }
 }
