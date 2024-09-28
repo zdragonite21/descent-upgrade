@@ -130,9 +130,7 @@ public class CameraMovement : MonoBehaviour
             this.transform.position = target.position - vectorToTarget.normalized * maxDistance;
         }
 
-
-        
-            transform.position += moveVel;
+        transform.position += moveVel;
 
     }
 

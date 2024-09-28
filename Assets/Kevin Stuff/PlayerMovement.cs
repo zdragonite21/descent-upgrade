@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
 
 public class PlayerMovement : MonoBehaviour
@@ -8,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Fields")]
     public float autoSpeed;
 
-    public float forwardLeanForce;
+    public float fasterAutoSpeed;
 
     public float sideLeanForce;
 
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rb;
 
 
+    private float currentAutoSpeed;
 
     public PlayerState CurrentState
     {
@@ -63,6 +65,8 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        currentAutoSpeed = autoSpeed;
+
         CurrentState = PlayerState.Midair;
     }
 
@@ -76,8 +80,8 @@ public class PlayerMovement : MonoBehaviour
         //
         //rb.velocity += transform.forward * autoSpeed * Time.deltaTime;
 
-        xInput = Input.GetAxisRaw("Horizontal");
-        yInput = Input.GetAxisRaw("Vertical");
+        xInput = Input.GetAxis("Horizontal");
+        yInput = Input.GetAxis("Vertical");
         m_UpdateHandler?.Invoke();
     }
 
@@ -98,7 +102,9 @@ public class PlayerMovement : MonoBehaviour
 
         float xVel = rb.velocity.x;
 
-        rb.velocity += (transform.forward * yInput * forwardLeanForce * Time.deltaTime);
+        currentAutoSpeed = Mathf.Clamp(currentAutoSpeed + Time.deltaTime * yInput, autoSpeed, fasterAutoSpeed);
+
+        rb.velocity += (transform.forward * yInput * currentAutoSpeed * Time.deltaTime);
         rb.velocity += (transform.forward * Time.deltaTime);
 
 
@@ -107,16 +113,13 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity += new Vector3(0f, jumpForce, 0f);
         }
-
-        // Leaning
-
     }
 
     private void OnMidair()
     {
-        rb.AddTorque(transform.up * xInput * tiltingFactor, ForceMode.Impulse);
+        rb.AddTorque(transform.up * xInput * tiltingFactor * 10f, ForceMode.Impulse);
 
-        rb.AddTorque(transform.right * yInput * tiltingFactor, ForceMode.Impulse);
+        rb.AddTorque(transform.right * yInput * tiltingFactor * 10f, ForceMode.Impulse);
 
     }
     private void MidairBehavior()
@@ -125,19 +128,26 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity += Vector3.down * gravityScale * Time.deltaTime;
         rb.velocity += transform.right * xInput * sideLeanForce * Time.deltaTime * 0.5f;
 
-        rb.rotation = Quaternion.RotateTowards(transform.rotation, 
-            Quaternion.AngleAxis(-xInput * Time.deltaTime * 10, transform.forward),
-            Time.deltaTime * 100f);
+        //rb.rotation = Quaternion.RotateTowards(transform.rotation, 
+        //    Quaternion.AngleAxis(Time.deltaTime * 10, rb.velocity),
+        //    Time.deltaTime * 100f);
 
         //Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, (Vector3.right * xInput)) * transform.rotation;
         //transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation,
         //    Time.fixedDeltaTime * tiltingFactor);
 
-        rb.AddTorque(transform.up * xInput * tiltingFactor * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        Quaternion targetRotation = Quaternion.FromToRotation(transform.forward, rb.velocity) * transform.rotation;
+        rb.rotation = Quaternion.Lerp(transform.rotation, targetRotation,
+            Time.fixedDeltaTime * tiltingFactor * 0.5f);
 
-        rb.AddTorque(transform.right * yInput * tiltingFactor * Time.fixedDeltaTime, ForceMode.VelocityChange);
 
+        float maxAngVel = 7f;
 
+        if (rb.angularVelocity.magnitude < maxAngVel)
+        {
+            rb.AddTorque(transform.right * yInput * tiltingFactor * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.x) / maxAngVel, ForceMode.VelocityChange);
+            rb.AddTorque(transform.up * xInput * tiltingFactor * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.y) / maxAngVel, ForceMode.VelocityChange);
+        }
     }
 
 
@@ -156,25 +166,32 @@ public class PlayerMovement : MonoBehaviour
 
         //transform.up = Vector3.Lerp(transform.up, hitInfo.normal, rotationAdjustionFactor * Time.deltaTime);
 
+        // Flat Rotation
         Quaternion targetRotation = Quaternion.FromToRotation(transform.forward, (Vector3.right * xInput) + Vector3.forward * Mathf.Abs(xInput)) * transform.rotation;
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation,
-            Time.fixedDeltaTime * tiltingFactor);
+            tiltingFactor * Time.fixedDeltaTime * (1f - Quaternion.Angle(transform.rotation, targetRotation) / 180f));
+        //rb.AddTorque(transform.up * tiltingFactor * Time.fixedDeltaTime * xInput, ForceMode.VelocityChange);
 
+        // Adhere to normals
         targetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
 
 
         // Diagonal Gravity
-        rb.velocity += directionalForce * Vector3.down * Time.deltaTime;
+        rb.velocity += directionalForce * Vector3.down * Time.fixedDeltaTime;
 
         // Horizontal "Gravity" to make the player go up slopes
         if (Mathf.Sin(angle) < 0)
         {
             //print("YO");
-            rb.velocity += Mathf.Abs(Mathf.Cos(angle)) * transform.forward * Time.deltaTime * autoSpeed;
+            rb.velocity += Mathf.Abs(Mathf.Cos(angle)) * transform.forward * Time.fixedDeltaTime * currentAutoSpeed;
             //Debug.DrawRay(transform.position, (Mathf.Abs(Mathf.Cos(angle)) * transform.forward * Time.deltaTime * autoSpeed).normalized, Color.red);
         }
 
+        //if (Vector3.Dot(rb.velocity, transform.right) > 0)
+        //{
+        //    rb.velocity -= transform.right * Time.fixedDeltaTime * 10f;
+        //}
 
 
         //print(directionalForce);
