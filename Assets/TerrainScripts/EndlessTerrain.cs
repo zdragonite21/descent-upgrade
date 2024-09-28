@@ -16,6 +16,8 @@ public class EndlessTerrain : MonoBehaviour
     public Transform viewer;
     public Material mapMaterial;
 
+    static Scatter scatter;
+
     public static Vector2 viewerPosition;
     Vector2 viewerPositionOld;
     static MapGenerator mapGenerator;
@@ -29,6 +31,7 @@ public class EndlessTerrain : MonoBehaviour
     void Start()
     {
         mapGenerator = FindObjectOfType<MapGenerator>();
+        scatter = FindObjectOfType<Scatter>();
         chunkSize = MapGenerator.mapChunkSize - 1;
         chunksVisibleInViewDst = Mathf.RoundToInt(maxViewDst / chunkSize);
         StartCoroutine(CheckChunksForDeletion());
@@ -153,6 +156,8 @@ public class EndlessTerrain : MonoBehaviour
             UpdateTerrainChunk();
             meshFilter.mesh = meshData.CreateMesh();
             meshCollider.sharedMesh = meshFilter.mesh;
+
+            scatter.ScatterObjects(meshData, meshObject.transform);
         }
 
 

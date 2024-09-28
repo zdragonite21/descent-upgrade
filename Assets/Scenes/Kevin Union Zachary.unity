@@ -784,6 +784,7 @@ GameObject:
   - component: {fileID: 522646502}
   - component: {fileID: 522646503}
   - component: {fileID: 522646504}
+  - component: {fileID: 522646505}
   m_Layer: 0
   m_Name: MapGenerator
   m_TagString: Untagged
@@ -860,6 +861,21 @@ MonoBehaviour:
   deleteWait: 5
   viewer: {fileID: 418387061}
   mapMaterial: {fileID: 2100000, guid: 0ba9f9677dcfecb4ca0f58aae1738876, type: 2}
+--- !u!114 &522646505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 522646500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33358df6f2c1dee44a905bddcd2484e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabs:
+  - {fileID: 3196713054233025381, guid: 3539f6385e86df44b980a8ce4faa602a, type: 3}
+  scatterChance: 0.001
 --- !u!1 &705477739
 GameObject:
   m_ObjectHideFlags: 0

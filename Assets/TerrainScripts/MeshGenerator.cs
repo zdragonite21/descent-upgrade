@@ -200,6 +200,11 @@ public class MeshData
         bakedNormals = CalculateNormals();
     }
 
+    public Vector3[] getVertices()
+    {
+        return vertices;
+    }
+
     public Mesh CreateMesh()
     {
         Mesh mesh = new Mesh();
