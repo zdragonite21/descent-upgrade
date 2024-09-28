@@ -42,7 +42,7 @@ public class MapGenerator : MonoBehaviour {
         }
         else if (drawMode == DrawMode.Mesh)
         {
-            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, levelOfDetail), TextureGenerator.TextureFromHeightMap(mapData.heightMap));
+            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapData.heightMap, mapData.probMap, meshHeightMultiplier, levelOfDetail), TextureGenerator.TextureFromHeightMap(mapData.heightMap));
         }
     }
 
@@ -75,7 +75,7 @@ public class MapGenerator : MonoBehaviour {
 
     void MeshDataThread(MapData mapData, Action<MeshData> callback)
     {
-        MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, levelOfDetail);
+        MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapData.heightMap, mapData.probMap, meshHeightMultiplier, levelOfDetail);
         lock (meshDataThreadInfoQueue)
         {
             meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback, meshData));
@@ -105,10 +105,11 @@ public class MapGenerator : MonoBehaviour {
 
     MapData GenerateMapData(Vector2 centre)
     {
-        
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize + levelOfDetail*2, mapChunkSize + levelOfDetail*2, seed, noiseScale, octaves, persistance, lacunarity, slope, centre + offset, normalizeMode);
+        float[,] noiseMap;
+        float[,] probMap;
+        (noiseMap, probMap) = Noise.GenerateNoiseMap(mapChunkSize + levelOfDetail*2, mapChunkSize + levelOfDetail*2, seed, noiseScale, octaves, persistance, lacunarity, slope, centre + offset, normalizeMode);
 
-        return new MapData(noiseMap);
+        return new MapData(noiseMap, probMap);
     }
 
     void OnValidate() {
@@ -138,9 +139,11 @@ public class MapGenerator : MonoBehaviour {
 public struct MapData
 {
     public readonly float[,] heightMap;
+    public readonly float[,] probMap;
 
-    public MapData(float[,] heightMap)
+    public MapData(float[,] heightMap, float[,] probMap)
     {
         this.heightMap = heightMap;
+        this.probMap = probMap;
     }
 }

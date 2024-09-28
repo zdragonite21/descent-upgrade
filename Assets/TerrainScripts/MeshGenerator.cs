@@ -6,7 +6,7 @@ using System;
 public static class MeshGenerator
 {
 
-    public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, int levelOfDetail)
+    public static MeshData GenerateTerrainMesh(float[,] heightMap, float[,] probMap, float heightMultiplier, int levelOfDetail)
     {
         int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail;
         int borderedSize = heightMap.GetLength(0) + 2 * levelOfDetail - 2 * meshSimplificationIncrement;
@@ -54,9 +54,11 @@ public static class MeshGenerator
                 Vector2 percent = new Vector2((x) / (float)(meshSize), (y) / (float)(meshSize));
                 Vector2 percentUV = new Vector2((x-meshSimplificationIncrement) / (float)meshSize, (y-meshSimplificationIncrement) / (float)meshSize);
                 float height = heightMap[x + lodDifference, y + lodDifference];
+                float probability = probMap[x + lodDifference, y + lodDifference];
                 Vector3 vertexPosition = new Vector3(topLeftX + percent.x * meshSize, height * heightMultiplier, topLeftZ - percent.y * meshSize);
 
                 meshData.AddVertex(vertexPosition, percentUV, vertexIndex);
+                meshData.AddProbability(probability, vertexIndex);
 
                 if (x < borderedSize - 1 && y < borderedSize - 1)
                 {
@@ -82,6 +84,7 @@ public static class MeshGenerator
 public class MeshData
 {
     Vector3[] vertices;
+    float[] probability;
     int[] triangles;
     Vector2[] uvs;
     Vector3[] bakedNormals;
@@ -95,6 +98,7 @@ public class MeshData
     public MeshData(int verticesPerLine)
     {
         vertices = new Vector3[verticesPerLine * verticesPerLine];
+        probability = new float[verticesPerLine * verticesPerLine];
         uvs = new Vector2[verticesPerLine * verticesPerLine];
         triangles = new int[(verticesPerLine - 1) * (verticesPerLine - 1) * 6];
 
@@ -130,6 +134,14 @@ public class MeshData
             triangles[triangleIndex + 1] = b;
             triangles[triangleIndex + 2] = c;
             triangleIndex += 3;
+        }
+    }
+
+    public void AddProbability(float prob, int vertexIndex)
+    {
+        if (vertexIndex >= 0)
+        {
+            probability[vertexIndex] = prob;
         }
     }
 
@@ -203,6 +215,16 @@ public class MeshData
     public Vector3[] getVertices()
     {
         return vertices;
+    }
+
+    public Vector3[] getNormals()
+    {
+        return bakedNormals;
+    }
+
+    public float[] getProbability()
+    {
+        return probability;
     }
 
     public Mesh CreateMesh()
