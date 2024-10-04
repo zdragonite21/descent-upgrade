@@ -10,7 +10,7 @@ public class Grounded : MonoBehaviour
 
     public LayerMask layerMask;
 
-    public PlayerMovement playerMovement;
+    public SnowboardCharlie2 playerMovement;
     public CameraMovement cameraMovement;
 
     public BoxCollider groundedCollider;
@@ -26,7 +26,7 @@ public class Grounded : MonoBehaviour
         {
             hitColliders.Add(other);
             IsGrounded = true;
-            playerMovement.CurrentState = PlayerMovement.PlayerState.Grounded;
+            playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Grounded;
             cameraMovement.CurrentState = CameraMovement.CameraState.Grounded;
         }
     }
@@ -38,7 +38,7 @@ public class Grounded : MonoBehaviour
             hitColliders.Clear();
 
             IsGrounded = false;
-            playerMovement.CurrentState = PlayerMovement.PlayerState.Midair;
+            playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Midair;
             cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
 
         }
@@ -50,7 +50,7 @@ public class Grounded : MonoBehaviour
         if (hitColliders.Count == 0 && IsGrounded)
         {
             IsGrounded = false;
-            playerMovement.CurrentState = PlayerMovement.PlayerState.Midair;
+            playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Midair;
             cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
         }
 
