@@ -879,12 +879,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33358df6f2c1dee44a905bddcd2484e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabs:
+  trees:
   - {fileID: 6887069963064374947, guid: d32d37ddc6650654fae0d7abff32ff67, type: 3}
+  lRocks:
+  - {fileID: 7573587040796546882, guid: f704b409c7b155c4fae0cb9d5c79156f, type: 3}
+  - {fileID: -2436488614963385204, guid: f704b409c7b155c4fae0cb9d5c79156f, type: 3}
+  - {fileID: 7248621045446880096, guid: f704b409c7b155c4fae0cb9d5c79156f, type: 3}
+  - {fileID: -8051138763696188950, guid: f704b409c7b155c4fae0cb9d5c79156f, type: 3}
+  - {fileID: 6623308148668728745, guid: f704b409c7b155c4fae0cb9d5c79156f, type: 3}
+  sRocks:
+  - {fileID: 7573587040796546882, guid: f8ea025723e6c6a49a7e76e7b848d978, type: 3}
+  - {fileID: -2436488614963385204, guid: f8ea025723e6c6a49a7e76e7b848d978, type: 3}
+  - {fileID: 7248621045446880096, guid: f8ea025723e6c6a49a7e76e7b848d978, type: 3}
+  - {fileID: -8051138763696188950, guid: f8ea025723e6c6a49a7e76e7b848d978, type: 3}
+  - {fileID: 6623308148668728745, guid: f8ea025723e6c6a49a7e76e7b848d978, type: 3}
+  treeDist: 1
+  lRockDist: 0.431
+  sRockDist: 0.632
   scatterChance: 0.035
   globalScale: 1
-  heightRange: {x: -10, y: 0}
-  scaleRange: {x: 0.5, y: 1.5}
+  heightRangeT: {x: -10, y: 0}
+  heightRangeR: {x: 1, y: 2}
+  scaleRangeT: {x: 0.5, y: 1.5}
+  scaleRangeR: {x: 0.8, y: 1.2}
   probMapStrength: 2
 --- !u!1 &705477739
 GameObject:
