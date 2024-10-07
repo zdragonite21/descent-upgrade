@@ -47,6 +47,22 @@ public class Scatter : MonoBehaviour
         }
     }
 
+    private void ScatterClusterAtVertex(Vector3 vertex, Transform parentTransform)
+    {
+        int clusterSize = Random.Range(3, 6); // Cluster size between 3 and 5
+        for (int i = 0; i < clusterSize; i++)
+        {
+            Vector3 offset = new Vector3(
+                Random.Range(-5f, 5f), // Random offset in x
+                0,                    // No offset in y
+                Random.Range(-5f, 5f) // Random offset in z
+            );
+
+            Vector3 clusterPosition = vertex + offset;
+            ScatterObjectAtVertex(clusterPosition, parentTransform);
+        }
+    }
+
     private void ScatterObjectAtVertex(Vector3 vertex, Transform parentTransform)
     {
         if (trees.Count == 0 && lRocks.Count == 0 && sRocks.Count == 0) return;
