@@ -7972,7 +7972,6 @@ MonoBehaviour:
     m_Bits: 64
   playerMovement: {fileID: 418387062}
   cameraMovement: {fileID: 921326019}
-  groundedCollider: {fileID: 1784089202}
 --- !u!1 &1817199179
 GameObject:
   m_ObjectHideFlags: 0

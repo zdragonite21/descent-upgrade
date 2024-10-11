@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
-[RequireComponent(typeof(Collider))]
 public class Grounded : MonoBehaviour
 {
     public bool IsGrounded;
@@ -13,45 +12,50 @@ public class Grounded : MonoBehaviour
     public SnowboardCharlie2 playerMovement;
     public CameraMovement cameraMovement;
 
-    public BoxCollider groundedCollider;
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (IsGrounded)
+    //        return;
 
-    List<Collider> hitColliders = new List<Collider>();
+    //    if (layerMask == (layerMask | (1 << other.gameObject.layer)))
+    //    {
+    //        IsGrounded = true;
+    //        playerMovement.CurrentState = PlayerMovement.PlayerState.Grounded;
+    //        cameraMovement.CurrentState = CameraMovement.CameraState.Grounded;
+    //    }
+    //}
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (IsGrounded)
-            return;
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (layerMask == (layerMask | (1 << other.gameObject.layer)))
+    //    {
 
-        if (layerMask == (layerMask | (1 << other.gameObject.layer)))
-        {
-            hitColliders.Add(other);
-            IsGrounded = true;
-            playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Grounded;
-            cameraMovement.CurrentState = CameraMovement.CameraState.Grounded;
-        }
-    }
+    //        IsGrounded = false;
+    //        playerMovement.CurrentState = PlayerMovement.PlayerState.Midair;
+    //        cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (layerMask == (layerMask | (1 << other.gameObject.layer)))
-        {
-            hitColliders.Clear();
-
-            IsGrounded = false;
-            playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Midair;
-            cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
-
-        }
-    }
+    //    }
+    //}
 
     private void Update()
     {
-
-        if (hitColliders.Count == 0 && IsGrounded)
+        if (Physics.Raycast(transform.position, Vector3.down, 2f, layerMask))
         {
-            IsGrounded = false;
-            playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Midair;
-            cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
+            if (!IsGrounded)
+            {
+                IsGrounded = true;
+                playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Grounded;
+                cameraMovement.CurrentState = CameraMovement.CameraState.Grounded;
+            }
+        }
+        else
+        {
+            if (IsGrounded)
+            {
+                IsGrounded = false;
+                playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Midair;
+                cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
+            }
         }
 
     }
