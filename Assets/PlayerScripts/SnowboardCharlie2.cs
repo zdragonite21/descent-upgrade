@@ -18,6 +18,7 @@ public class SnowboardCharlie2 : MonoBehaviour
     public float airSommersault;
     public float rotationAdjustionFactor;
     [Header("References")]
+    public Animator animator;
     public Grounded playerGrounded;
     public Rigidbody rb;
     private float currentAutoSpeed;
@@ -72,9 +73,19 @@ public class SnowboardCharlie2 : MonoBehaviour
     }
     float xInput;
     float yInput;
+    float animCrouchBlend;
     // Update is called once per frame
     void Update()
     {
+        if (m_CurrentState == PlayerState.Midair)
+            animCrouchBlend = Mathf.Lerp(animCrouchBlend, 1f, 3f * Time.deltaTime);
+        else if (Input.GetButton("Jump"))
+            animCrouchBlend = Mathf.Lerp(animCrouchBlend, 1f, 6f * Time.deltaTime);
+        else
+            animCrouchBlend = Mathf.Lerp(animCrouchBlend, 0f, 7f * Time.deltaTime);
+        if (animator != null)
+            animator.SetFloat("CrouchBlend", animCrouchBlend);
+
         // Gravity
         xInput = Input.GetAxis("Horizontal");
         yInput = Input.GetAxis("Vertical");
@@ -116,7 +127,8 @@ public class SnowboardCharlie2 : MonoBehaviour
                 jumpFactor = 1 + stateTimeCounter * 0.01f;
             }
             rb.AddForce(new Vector3(0f, jumpForce * jumpFactor * 10f, 0f), ForceMode.Impulse);
-            print(jumpFactor);  
+            print(jumpFactor);
+            animCrouchBlend = 0f;
         }
     }
     private void OnMidair()
