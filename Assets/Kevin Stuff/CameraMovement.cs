@@ -58,7 +58,7 @@ public class CameraMovement : MonoBehaviour
                 default:
                     break;
             }
-            
+
             m_CurrentState = value;
         }
     }
@@ -93,8 +93,9 @@ public class CameraMovement : MonoBehaviour
     float distanceToTarget;
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
     {
+
         vectorToTarget = (target.position - this.transform.position);
         distanceToTarget = vectorToTarget.magnitude;
 
@@ -109,9 +110,9 @@ public class CameraMovement : MonoBehaviour
     {
         // Scale the moveVel by the xFactor in the rightward direction to make x-axis adjust more
         float x = Vector3.Dot(Vector3.right, vectorToTarget);
-        Vector3 v =  Vector3.right * x * xFactor * Time.fixedDeltaTime * Mathf.Lerp(0f, 1f, (transform.position.x-target.position.x)/maxDistance);
+        Vector3 v = Vector3.right * x * xFactor * Time.deltaTime * Mathf.Lerp(0f, 1f, (transform.position.x - target.position.x) / maxDistance);
 
-        if (distanceToTarget > maxDistance+x)
+        if (distanceToTarget > maxDistance + x)
         {
             transform.position += v;
         }
@@ -119,7 +120,7 @@ public class CameraMovement : MonoBehaviour
         vectorToTarget = (target.position - this.transform.position);
         distanceToTarget = vectorToTarget.magnitude;
 
-        Vector3 moveVel = Time.fixedDeltaTime * maxMovementSpeed * Mathf.Lerp(0f,
+        Vector3 moveVel = Time.deltaTime * maxMovementSpeed * Mathf.Lerp(0f,
                 1f,
                 distanceToTarget * distanceToTarget / (maxDistance * maxDistance))
                 * vectorToTarget.normalized;
@@ -132,6 +133,13 @@ public class CameraMovement : MonoBehaviour
 
         transform.position += moveVel;
 
+    }
+
+    private void SmoothRotateWithPlayer()
+    {
+        Quaternion targetRotation = Quaternion.Euler(target.transform.rotation.eulerAngles.x - 20f, 0f, 0f);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 3f * Time.deltaTime);
     }
 
     private void OnGrounded()
@@ -160,6 +168,7 @@ public class CameraMovement : MonoBehaviour
     private void GroundedBehavior()
     {
         SmoothMoveWithPlayer();
+        SmoothRotateWithPlayer();
 
         // Dynamically change the field of view
         ChangeFieldOfView(Mathf.SmoothStep(minCamFOV,
@@ -187,15 +196,16 @@ public class CameraMovement : MonoBehaviour
     private void MidairBehavior()
     {
         SmoothMoveWithPlayer();
+        SmoothRotateWithPlayer();
 
-        timeInAir += Time.fixedDeltaTime;
+        timeInAir += Time.deltaTime;
 
         ChangeSpeedlinesEmission(speedlines.emission.rateOverTime.constant + midairSpeedlinesExtraEmissionCount, 0.2f);
     }
 
-#endregion
+    #endregion
 
-#region Transition Functions
+    #region Transition Functions
 
     Coroutine changeSpeedlinesCoroutine;
     private void ChangeSpeedlinesEmission(float newValue, float transitionTime)
@@ -216,10 +226,10 @@ public class CameraMovement : MonoBehaviour
     Coroutine changeFOVCoroutine;
     private void ChangeFieldOfView(float newFOV, float transitionTime)
     {
-        TryChangeFloatTransition(ref changeFOVCoroutine, cameraValues.fieldOfView, newFOV, transitionTime, 
-            (float f) => cameraValues.fieldOfView = f, () => changeFOVCoroutine = null);  
+        TryChangeFloatTransition(ref changeFOVCoroutine, cameraValues.fieldOfView, newFOV, transitionTime,
+            (float f) => cameraValues.fieldOfView = f, () => changeFOVCoroutine = null);
     }
-    
+
     public bool TryChangeFloatTransition(ref Coroutine c, float oldF, float newF, float transitionTime,
         Action<float> funcToDo, Action end)
     {
@@ -240,7 +250,7 @@ public class CameraMovement : MonoBehaviour
         return false;
     }
 
-#endregion
+    #endregion
 }
 
 
