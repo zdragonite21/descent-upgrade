@@ -267,8 +267,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 212456959}
-  - component: {fileID: 212456961}
-  - component: {fileID: 212456960}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -288,14 +286,14 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1652919355}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -400}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &212456960
+--- !u!114 &212456960 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3435371959829222733, guid: 794ee4edf91d9452990dc24f54c1f2ae,
     type: 3}
@@ -2024,7 +2022,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1295594796}
-  m_Father: {fileID: 321203283}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2075,7 +2073,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 321203284}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GameOverScreen, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1
@@ -7681,7 +7679,7 @@ PrefabInstance:
         type: 3}
       propertyPath: pointAddText
       value: 
-      objectReference: {fileID: 143054830}
+      objectReference: {fileID: 212456960}
     - target: {fileID: 7568857934629178704, guid: f745236a830cb4648a1a581262c88b32,
         type: 3}
       propertyPath: pointGradeText
@@ -7713,3 +7711,5 @@ SceneRoots:
   - {fileID: 303012411}
   - {fileID: 1832316037}
   - {fileID: 1167351754}
+  - {fileID: 212456959}
+  - {fileID: 1523853765}
