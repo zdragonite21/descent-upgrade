@@ -10,7 +10,7 @@ public class EndlessTerrain : MonoBehaviour
     const float viewerMoveThresholdForChunkUpdate = 25f;
     const float sqrViewerMoveThresholdForChunkUpdate = viewerMoveThresholdForChunkUpdate * viewerMoveThresholdForChunkUpdate;
 
-    public const float maxViewDst = 850;
+    public const float maxViewDst = 1200;
     public const float deleteViewDst = maxViewDst * 1.5f;
     public float deleteWait = 5f;
     public Transform viewer;
