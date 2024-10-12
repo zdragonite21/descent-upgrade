@@ -1,16 +1,44 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public static class Noise
 {
 
     public enum NormalizeMode { Local, Global };
 
-    public static (float[,], float[,]) GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, float slope, Vector2 offset, NormalizeMode normalizeMode)
+    public static (float[,], float[,]) GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, float slope, Vector2 offset, NormalizeMode normalizeMode, AnimationCurve probCurve)
     {
+        float halfWidth = mapWidth / 2f;
+        Func<int, int, float, float> slopeFunc = (x, y, height) => (y - halfWidth - offset.y) / mapHeight * slope + height;
+        static double LogisticFunc(double x, double k, double x0) => 1 / (1 + Math.Exp(-k * (x - x0)));
+
+
+        float[,] heightMap = NoiseMap(mapWidth, mapHeight, seed, scale, octaves, persistance, lacunarity, offset, normalizeMode, slopeFunc);
+        float[,] probMap = NoiseMap(mapWidth, mapHeight, seed, scale, octaves, persistance, lacunarity, offset, NormalizeMode.Local);
+
+        float[,] treeProbMap = NoiseMap(mapWidth, mapHeight, seed+1, scale/1.5f, 1, persistance, lacunarity, offset, NormalizeMode.Local, (x, y, h) => h);
+
+        for (int i = 0; i < probMap.GetLength(0); i++)
+        {
+            for (int j = 0; j < probMap.GetLength(1); j++)
+            {
+                probMap[i, j] = probCurve.Evaluate(probMap[i, j]) * (float)LogisticFunc(treeProbMap[i, j], 20.0, 0.5);
+            }
+        }
+
+        return (heightMap, probMap);    
+    }
+
+    static float[,] NoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode, Func<int, int, float, float> func = null)
+    {
+        if (func == null)
+        {
+            func = (_, _, h) => h;
+        }
+
         float[,] noiseMap = new float[mapWidth, mapHeight];
-        float[,] probMap = new float[mapWidth, mapHeight];
 
         System.Random prng = new System.Random(seed);
         Vector2[] octaveOffsets = new Vector2[octaves];
@@ -37,15 +65,11 @@ public static class Noise
         float maxLocalNoiseHeight = float.MinValue;
         float minLocalNoiseHeight = float.MaxValue;
 
-        float maxProbValue = float.MinValue;
-        float minProbValue = float.MaxValue;
-
         float halfWidth = mapWidth / 2f;
         float halfHeight = mapHeight / 2f;
 
         for (int y = 0; y < mapHeight; y++)
         {
-            float sY = (y - halfWidth - offset.y) / mapHeight * slope;
             for (int x = 0; x < mapWidth; x++)
             {
 
@@ -65,6 +89,8 @@ public static class Noise
                     frequency *= lacunarity;
                 }
 
+                noiseHeight = func(x, y, noiseHeight);
+
                 if (noiseHeight > maxLocalNoiseHeight)
                 {
                     maxLocalNoiseHeight = noiseHeight;
@@ -74,17 +100,7 @@ public static class Noise
                     minLocalNoiseHeight = noiseHeight;
                 }
 
-                noiseMap[x, y] = noiseHeight + sY;
-                probMap[x, y] = noiseHeight;
-
-                if (probMap[x, y] > maxProbValue)
-                {
-                    maxProbValue = probMap[x, y];
-                }
-                else if (probMap[x, y] < minProbValue)
-                {
-                    minProbValue = probMap[x, y];
-                }
+                noiseMap[x, y] = noiseHeight;
             }
         }
 
@@ -101,11 +117,9 @@ public static class Noise
                     float normalizedHeight = (noiseMap[x, y] + 1) / (2f * maxPossibleHeight);
                     noiseMap[x, y] = normalizedHeight;
                 }
-
-                probMap[x, y] = Mathf.InverseLerp(minProbValue, maxProbValue, probMap[x, y]);
             }
         }
 
-        return (noiseMap, probMap);
+        return noiseMap;
     }
 }

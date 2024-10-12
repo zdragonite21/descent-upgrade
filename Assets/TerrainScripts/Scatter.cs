@@ -1,13 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
-using JetBrains.Annotations;
-using UnityEditor;
+using UnityEngine.Pool;
 
 public class Scatter : MonoBehaviour
 {
     public List<GameObject> trees;
     public List<GameObject> lRocks;
     public List<GameObject> sRocks;
+
+    private ObjectPool<GameObject> treePool;
 
     [Range(0, 1)]
     public float treeDist = 1f;
@@ -24,6 +25,19 @@ public class Scatter : MonoBehaviour
     public Vector2 scaleRangeT = new Vector2(0.5f, 1.5f);
     public Vector2 scaleRangeR = new Vector2(0.8f, 1.2f);
     public float probMapStrength = 2f;
+
+    private void Start()
+    {
+        treePool = new ObjectPool<GameObject>(
+            createFunc: () => Instantiate(trees[0]),
+            actionOnGet: obj => obj.SetActive(true),
+            actionOnRelease: obj => obj.SetActive(false),
+            actionOnDestroy: obj => Destroy(obj),
+            collectionCheck: false,
+            defaultCapacity: 10,
+            maxSize: 100
+        );
+    }
 
     public void ScatterObjects(MeshData meshData, Transform parentTransform)
     {
@@ -42,7 +56,7 @@ public class Scatter : MonoBehaviour
             float chance = scatterChance * Mathf.Pow(probability[i], probMapStrength);
             if (vertex.z != 0 && Random.value < chance)
             {
-                ScatterObjectAtVertex(vertex, parentTransform);
+                ScatterTree(vertex, parentTransform);
             }
         }
     }
@@ -84,7 +98,7 @@ public class Scatter : MonoBehaviour
 
     private void ScatterTree(Vector3 vertex, Transform parentTransform)
     {
-        GameObject tree = trees[Random.Range(0, trees.Count)];
+        GameObject tree = treePool.Get();
         GameObject instance = Instantiate(tree, vertex, Quaternion.identity);
 
         instance.transform.parent = parentTransform;

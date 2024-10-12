@@ -25,6 +25,7 @@ public class MapGenerator : MonoBehaviour {
 	public Vector2 offset;
 
     public float meshHeightMultiplier;
+    public AnimationCurve probabilityCurve;
 
     public bool autoUpdate;
 
@@ -107,7 +108,7 @@ public class MapGenerator : MonoBehaviour {
     {
         float[,] noiseMap;
         float[,] probMap;
-        (noiseMap, probMap) = Noise.GenerateNoiseMap(mapChunkSize + levelOfDetail*2, mapChunkSize + levelOfDetail*2, seed, noiseScale, octaves, persistance, lacunarity, slope, centre + offset, normalizeMode);
+        (noiseMap, probMap) = Noise.GenerateNoiseMap(mapChunkSize + levelOfDetail*2, mapChunkSize + levelOfDetail*2, seed, noiseScale, octaves, persistance, lacunarity, slope, centre + offset, normalizeMode, probabilityCurve);
 
         return new MapData(noiseMap, probMap);
     }
