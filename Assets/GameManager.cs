@@ -74,11 +74,11 @@ public class GameManager : MonoBehaviour
             pointAddText.text = "+" + Mathf.RoundToInt(pointTrickAdd);
             string gradeText = "";
             if (trickHSpin)
-                gradeText = "Good!";
+                gradeText = "GOOD";
             if (trickVSpin)
-                gradeText = "Great!";
+                gradeText = "GREAT";
             if (trickHSpin && trickVSpin && timeTricking >= 4f)
-                gradeText = "Excellent!";
+                gradeText = "EXCELLENT";
             pointGradeText.text = gradeText;
         }
     }
