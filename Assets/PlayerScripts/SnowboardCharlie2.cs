@@ -23,6 +23,7 @@ public class SnowboardCharlie2 : MonoBehaviour
     public Rigidbody rb;
     private float currentAutoSpeed;
     public Vector3 rbv;
+    private TrailRenderer trailRenderer;
     public PlayerState CurrentState
     {
         get => m_CurrentState;
@@ -70,6 +71,7 @@ public class SnowboardCharlie2 : MonoBehaviour
     {
         currentAutoSpeed = autoSpeed;
         CurrentState = PlayerState.Midair;
+        trailRenderer = GetComponentInChildren<TrailRenderer>();
     }
     float xInput;
     float yInput;
@@ -91,7 +93,12 @@ public class SnowboardCharlie2 : MonoBehaviour
         yInput = Input.GetAxis("Vertical");
         m_UpdateHandler?.Invoke();
     }
-    private void OnGrounded() {}
+    private void OnGrounded() {
+        if (trailRenderer != null)
+        {
+            trailRenderer.emitting = true; // Enable trail when grounded
+        }
+    }
     private void GroundedBehavior()
     {
         print("IN Ground");
@@ -133,6 +140,10 @@ public class SnowboardCharlie2 : MonoBehaviour
     }
     private void OnMidair()
     {
+        if (trailRenderer != null)
+        {
+            trailRenderer.emitting = false;
+        }
         rb.AddTorque(transform.up * airSommersault * xInput * tiltingFactor * 10f, ForceMode.Impulse);
         rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 10f, ForceMode.Impulse);
     }
