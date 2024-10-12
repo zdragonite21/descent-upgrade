@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
+using System;
 
 public class EndlessTerrain : MonoBehaviour
 {
@@ -110,8 +110,10 @@ public class EndlessTerrain : MonoBehaviour
 
     public class TerrainChunk
     {
+        public Action onChunkDeleted;
 
         GameObject meshObject;
+        MeshData meshData;
         Vector2 position;
         Vector2 coord;
         Bounds bounds;
@@ -154,10 +156,11 @@ public class EndlessTerrain : MonoBehaviour
         void OnMeshDataReceived(MeshData meshData)
         {
             UpdateTerrainChunk();
+            this.meshData = meshData;
             meshFilter.mesh = meshData.CreateMesh();
             meshCollider.sharedMesh = meshFilter.mesh;
 
-            scatter.ScatterObjects(meshData, meshObject.transform);
+            scatter.ScatterObjects(meshData, meshObject.transform, ref onChunkDeleted);
         }
 
 
@@ -180,6 +183,9 @@ public class EndlessTerrain : MonoBehaviour
 
         public void Delete()
         {
+            onChunkDeleted?.Invoke();
+            onChunkDeleted = null;
+            Debug.Log("Delete Message Sent");
             Destroy(meshObject);
         }
 
