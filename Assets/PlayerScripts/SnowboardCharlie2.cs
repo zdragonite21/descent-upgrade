@@ -23,6 +23,7 @@ public class SnowboardCharlie2 : MonoBehaviour
     public Rigidbody rb;
     private float currentAutoSpeed;
     public Vector3 rbv;
+    private TrailRenderer trailRenderer;
     public PlayerState CurrentState
     {
         get => m_CurrentState;
@@ -65,11 +66,16 @@ public class SnowboardCharlie2 : MonoBehaviour
     public GroundState currGroundState;
     public float stateTimeCounter;
     public Vector3 moveDirection;
+    private GameManager manager;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        manager.Setup(rb);
         currentAutoSpeed = autoSpeed;
         CurrentState = PlayerState.Midair;
+        trailRenderer = GetComponentInChildren<TrailRenderer>();
     }
     float xInput;
     float yInput;
@@ -91,10 +97,16 @@ public class SnowboardCharlie2 : MonoBehaviour
         yInput = Input.GetAxis("Vertical");
         m_UpdateHandler?.Invoke();
     }
-    private void OnGrounded() {}
+    private void OnGrounded() {
+        if (trailRenderer != null)
+        {
+            trailRenderer.emitting = true; // Enable trail when grounded
+        }
+        manager.ScoreTrick(false);
+    }
     private void GroundedBehavior()
     {
-        print("IN Ground");
+        //print("IN Ground");
         // Get player input for movement
         if (xInput != 0 && yInput < 0 && currGroundState != GroundState.Carving) {
             currGroundState = GroundState.Carving;
@@ -127,18 +139,23 @@ public class SnowboardCharlie2 : MonoBehaviour
                 jumpFactor = 1 + stateTimeCounter * 0.01f;
             }
             rb.AddForce(new Vector3(0f, jumpForce * jumpFactor * 10f, 0f), ForceMode.Impulse);
-            print(jumpFactor);
+            //print(jumpFactor);
             animCrouchBlend = 0f;
         }
     }
     private void OnMidair()
     {
+        if (trailRenderer != null)
+        {
+            trailRenderer.emitting = false;
+        }
+        manager.ScoreTrick(true);
         rb.AddTorque(transform.up * airSommersault * xInput * tiltingFactor * 10f, ForceMode.Impulse);
         rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 10f, ForceMode.Impulse);
     }
     private void MidairBehavior()
     {
-        print("IN AIR");
+        //print("IN AIR");
         rb.velocity += 1.5f * Vector3.down * gravityScale * Time.deltaTime;
         rb.velocity += transform.right * xInput * sideLeanForce * Time.deltaTime * 0.5f;
 
@@ -149,8 +166,8 @@ public class SnowboardCharlie2 : MonoBehaviour
 
         if (rb.angularVelocity.magnitude < maxAngVel)
         {
-            rb.AddTorque(transform.right * yInput * tiltingFactor * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.x) / maxAngVel, ForceMode.VelocityChange);
-            rb.AddTorque(transform.up * xInput * tiltingFactor * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.y) / maxAngVel, ForceMode.VelocityChange);
+            rb.AddTorque(transform.right * yInput * airSpinSpeed * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.x) / maxAngVel, ForceMode.VelocityChange);
+            rb.AddTorque(transform.up * xInput * airSommersault * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.y) / maxAngVel, ForceMode.VelocityChange);
         }
     }
     private void SetSlopeSlideVelocity()

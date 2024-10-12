@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Death : MonoBehaviour
 {
+    /*
     // Start is called before the first frame update
     private GameManager gameManager;
     public bool isDead;
@@ -26,4 +27,5 @@ public class Death : MonoBehaviour
         gameManager.GameOver();
         pmovement.enabled = false;
     }
+    */
 }
