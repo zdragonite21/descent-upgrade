@@ -11,19 +11,12 @@ public class Grounded : MonoBehaviour
 
     public SnowboardCharlie2 playerMovement;
     public CameraMovement cameraMovement;
+    public Death death;
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (IsGrounded)
-    //        return;
-
-    //    if (layerMask == (layerMask | (1 << other.gameObject.layer)))
-    //    {
-    //        IsGrounded = true;
-    //        playerMovement.CurrentState = PlayerMovement.PlayerState.Grounded;
-    //        cameraMovement.CurrentState = CameraMovement.CameraState.Grounded;
-    //    }
-    //}
+    private void OnTriggerEnter(Collider other)
+    {   
+        if (!IsGrounded) {death.CheckDeath(); IsGrounded = false; print("Hitbox Check");}
+    }
 
     //private void OnTriggerExit(Collider other)
     //{
@@ -39,22 +32,26 @@ public class Grounded : MonoBehaviour
 
     private void Update()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, 2f, layerMask))
-        {
-            if (!IsGrounded)
+        if (!death.isDead) {
+            if (Physics.Raycast(transform.parent.position, -1 * transform.parent.up, 2f, layerMask))
             {
-                IsGrounded = true;
-                playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Grounded;
-                cameraMovement.CurrentState = CameraMovement.CameraState.Grounded;
+                if (!IsGrounded)
+                {
+                    print("Landing Check");
+                    death.CheckDeath();
+                    IsGrounded = true;
+                    playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Grounded;
+                    cameraMovement.CurrentState = CameraMovement.CameraState.Grounded; 
+                }
             }
-        }
-        else
-        {
-            if (IsGrounded)
+            else
             {
-                IsGrounded = false;
-                playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Midair;
-                cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
+                if (IsGrounded)
+                {
+                    IsGrounded = false;
+                    playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Midair;
+                    cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
+                } 
             }
         }
 

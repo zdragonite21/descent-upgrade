@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     private float timeTricking;
     private bool trickHSpin;
     private bool trickVSpin;
+    public GameOverScreen gmover;
 
     private void Start()
     {
@@ -81,6 +82,10 @@ public class GameManager : MonoBehaviour
                 gradeText = "EXCELLENT";
             pointGradeText.text = gradeText;
         }
+    }
+
+    public void GameOver() {
+        gmover.SetUp(pointTotal);
     }
 
     /*
