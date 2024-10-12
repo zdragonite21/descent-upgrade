@@ -185,7 +185,6 @@ public class EndlessTerrain : MonoBehaviour
         {
             onChunkDeleted?.Invoke();
             onChunkDeleted = null;
-            Debug.Log("Delete Message Sent");
             Destroy(meshObject);
         }
 

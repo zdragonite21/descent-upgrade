@@ -141,6 +141,5 @@ public class Scatter : MonoBehaviour
     private void KillObject(ScatterObject obj)
     {
         treePool.Release(obj);
-        Debug.Log("Active: " + treePool.CountActive + " Inactive: " + treePool.CountInactive);
     }
 }
