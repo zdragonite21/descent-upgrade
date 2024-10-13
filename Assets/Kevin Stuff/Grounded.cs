@@ -15,7 +15,7 @@ public class Grounded : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {   
-        if (!IsGrounded) {death.CheckDeath(); IsGrounded = false; print("Hitbox Check");}
+        if (!IsGrounded) {death.CheckDeath();}
     }
 
     //private void OnTriggerExit(Collider other)
@@ -33,15 +33,20 @@ public class Grounded : MonoBehaviour
     private void Update()
     {
         if (!death.isDead) {
-            if (Physics.Raycast(transform.parent.position, -1 * transform.parent.up, 2f, layerMask))
+            if (Physics.Raycast(transform.parent.position, Vector3.down, 1.75f, layerMask))
             {
                 if (!IsGrounded)
                 {
                     print("Landing Check");
-                    death.CheckDeath();
-                    IsGrounded = true;
-                    playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Grounded;
-                    cameraMovement.CurrentState = CameraMovement.CameraState.Grounded; 
+                    if (death.CheckDeath()) {
+                        IsGrounded = false; 
+                        //playerMovement.enabled = false;
+                    } else { 
+                        IsGrounded = true;
+                        playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Grounded;
+                        cameraMovement.CurrentState = CameraMovement.CameraState.Grounded; 
+                    }
+                    
                 }
             }
             else

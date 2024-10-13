@@ -13,6 +13,7 @@ public class Death : MonoBehaviour
     public SnowboardCharlie2 pmovement;
     public float deathDelay;
     public Grounded playerGrounded;
+    public float deathAngle;
     private Rigidbody playerRB;
     private Vector3 deathlaunch;
     void Start()
@@ -32,37 +33,23 @@ public class Death : MonoBehaviour
 
     public bool CheckDeath() {
         bool isToDie = false;
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, 5f, playerGrounded.layerMask))
-        {   
-            float landingAngle = 0;
-            if (Mathf.Abs(this.transform.parent.rotation.eulerAngles.x -360) < 30) {
-                landingAngle = Mathf.Abs(this.transform.parent.rotation.eulerAngles.x -360) %360;
-            } else {
-                landingAngle = this.transform.parent.rotation.eulerAngles.x %360;
-            }
-             
-            float groundAngle = Vector3.Angle(hitInfo.normal, Vector3.up);
+        Physics.Raycast(transform.position, Vector3.down, out RaycastHit hitInfo, 5f, playerGrounded.layerMask);
+            float landingAngle = Vector3.Angle(hitInfo.normal, -1 * transform.parent.up);
             // if (this.transform.parent.rotation.eulerAngles.x > 180) {
             //     landingAngle = 360 - this.transform.parent.rotation.eulerAngles.x;
             // } else {
             //     landingAngle = this.transform.parent.rotation.eulerAngles.x;
             // }
-            isToDie = !(landingAngle > groundAngle - 45 && landingAngle < groundAngle+45);
-            print(landingAngle+  " " + groundAngle);
+            isToDie = landingAngle < deathAngle;
+            //print(landingAngle + " " + isToDie);
             if (isToDie) {
-                deathDelay += 5f;
+                deathDelay += 1f;
                 playerRB.drag = 0.75f;
                 //deathlaunch = new Vector3(playerRB.velocity.x, 0, playerRB.velocity.z);
                 
             }
-        }
        
         return isToDie;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Die();
     }
     public void Die()
     {   

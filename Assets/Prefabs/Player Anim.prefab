@@ -10805,9 +10805,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.3
-  m_Height: 1.45
+  m_Height: 1.8
   m_Direction: 1
-  m_Center: {x: 0, y: -1.24, z: 0}
+  m_Center: {x: 0, y: -1.16, z: 0}
 --- !u!114 &5954541937583294980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10824,6 +10824,7 @@ MonoBehaviour:
   pmovement: {fileID: 8555560249573640151}
   deathDelay: 0
   playerGrounded: {fileID: 1991179431118718385}
+  deathAngle: 90
 --- !u!1 &6253937640072739063
 GameObject:
   m_ObjectHideFlags: 0
