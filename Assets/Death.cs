@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEditor.Build.Content;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class Death : MonoBehaviour
