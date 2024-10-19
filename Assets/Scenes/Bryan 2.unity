@@ -7059,6 +7059,18 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 9c35603bd48b1b84ba78a114a124436a, type: 2}
+--- !u!114 &1856011245 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2660399413097014534, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 7719715372828207808}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 056e1d168cb049c4d811169d40ae5161, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1870959218
 GameObject:
   m_ObjectHideFlags: 0
@@ -7504,6 +7516,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2660399413097014534, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: mainGameSceneName
+      value: Bryan 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3634448112159805929, guid: 794ee4edf91d9452990dc24f54c1f2ae,
         type: 3}
       propertyPath: m_Pivot.x
@@ -7689,6 +7706,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7568857934629178704, guid: f745236a830cb4648a1a581262c88b32,
+        type: 3}
+      propertyPath: gmover
+      value: 
+      objectReference: {fileID: 1856011245}
     - target: {fileID: 7568857934629178704, guid: f745236a830cb4648a1a581262c88b32,
         type: 3}
       propertyPath: pointAddText

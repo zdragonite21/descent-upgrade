@@ -24,12 +24,17 @@ public class EndlessTerrain : MonoBehaviour
     int chunkSize;
     int chunksVisibleInViewDst;
 
-    Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
-    List<TerrainChunk> terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
-    List<TerrainChunk> terrainChunksDelete = new List<TerrainChunk>();
+    Dictionary<Vector2, TerrainChunk> terrainChunkDictionary;
+    List<TerrainChunk> terrainChunksVisibleLastUpdate;
+    List<TerrainChunk> terrainChunksDelete;
 
     void Start()
     {
+        ResetStaticVariables();
+        terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
+        terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
+        terrainChunksDelete = new List<TerrainChunk>();
+
         mapGenerator = FindObjectOfType<MapGenerator>();
         scatter = FindObjectOfType<Scatter>();
         chunkSize = MapGenerator.mapChunkSize - 1;
@@ -37,6 +42,13 @@ public class EndlessTerrain : MonoBehaviour
         StartCoroutine(CheckChunksForDeletion());
 
         UpdateVisibleChunks();
+    }
+
+    void ResetStaticVariables()
+    {
+        scatter = null;
+        mapGenerator = null;
+        viewerPosition = Vector2.zero;
     }
 
     void Update()
