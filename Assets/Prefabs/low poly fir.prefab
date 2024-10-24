@@ -63,10 +63,25 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: b8cf5db2a93067d43aeefe15db76d92d, type: 2}
+    - target: {fileID: -1599826595754709761, guid: 15ca97807e1d1ef4a8059d551b15f245,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 15ca97807e1d1ef4a8059d551b15f245,
         type: 3}
       propertyPath: m_Name
       value: low poly fir
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 15ca97807e1d1ef4a8059d551b15f245,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226710517262229712, guid: 15ca97807e1d1ef4a8059d551b15f245,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
