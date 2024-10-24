@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Pool;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -15,6 +16,8 @@ public class EndlessTerrain : MonoBehaviour
     public float deleteWait = 5f;
     public Transform viewer;
     public Material mapMaterial;
+
+    private ObjectPool<TerrainChunk> chunkPool;
 
     static Scatter scatter;
 
@@ -40,6 +43,16 @@ public class EndlessTerrain : MonoBehaviour
         chunkSize = MapGenerator.mapChunkSize - 1;
         chunksVisibleInViewDst = Mathf.RoundToInt(maxViewDst / chunkSize);
         StartCoroutine(CheckChunksForDeletion());
+
+        chunkPool = new ObjectPool<TerrainChunk>(
+            createFunc: () => new TerrainChunk(KillObject),
+            actionOnGet: chunk => chunk.SetVisible(true),
+            actionOnRelease: chunk => chunk.SetVisible(false),
+            actionOnDestroy: chunk => chunk.Destroy(),
+            collectionCheck: false,
+            defaultCapacity: 100,
+            maxSize: 500
+        );
 
         UpdateVisibleChunks();
     }
@@ -97,7 +110,9 @@ public class EndlessTerrain : MonoBehaviour
                 }
                 else
                 {
-                    terrainChunkDictionary.Add(viewedChunkCoord, new TerrainChunk(viewedChunkCoord, chunkSize, transform, mapMaterial));
+                    TerrainChunk tc = chunkPool.Get();
+                    tc.Initialize(viewedChunkCoord, chunkSize, transform, mapMaterial);
+                    terrainChunkDictionary.Add(viewedChunkCoord, tc);
                 }
 
             }
@@ -120,9 +135,16 @@ public class EndlessTerrain : MonoBehaviour
         }
     }
 
+    private void KillObject(TerrainChunk tc)
+    {
+        chunkPool.Release(tc);
+    }
+
     public class TerrainChunk
     {
         public Action onChunkDeleted;
+
+        private Action<TerrainChunk> _killAction;
 
         GameObject meshObject;
         MeshData meshData;
@@ -135,19 +157,24 @@ public class EndlessTerrain : MonoBehaviour
         MeshCollider meshCollider;
 
 
-        public TerrainChunk(Vector2 coord, int size, Transform parent, Material material)
+        public TerrainChunk(Action<TerrainChunk> killAction)
+        {
+            meshObject = new GameObject("Terrain Chunk");
+            meshObject.layer = LayerMask.NameToLayer("Ground");
+            meshRenderer = meshObject.AddComponent<MeshRenderer>();
+            meshFilter = meshObject.AddComponent<MeshFilter>();
+            meshCollider = meshObject.AddComponent<MeshCollider>();
+            _killAction = killAction;
+        }
+
+        public void Initialize(Vector2 coord, int size, Transform parent, Material material)
         {
             this.coord = coord;
             position = coord * size;
             bounds = new Bounds(position, Vector2.one * size);
             Vector3 positionV3 = new Vector3(position.x, 0, position.y);
 
-            meshObject = new GameObject("Terrain Chunk");
-            meshRenderer = meshObject.AddComponent<MeshRenderer>();
-            meshFilter = meshObject.AddComponent<MeshFilter>();
-            meshCollider = meshObject.AddComponent<MeshCollider>();
             meshRenderer.material = material;
-            meshObject.layer = LayerMask.NameToLayer("Ground");
 
             meshObject.transform.position = positionV3 * scale;
             meshObject.transform.localScale = Vector3.one * scale;
@@ -160,9 +187,6 @@ public class EndlessTerrain : MonoBehaviour
         void OnMapDataReceived(MapData mapData)
         {
             mapGenerator.RequestMeshData(mapData, OnMeshDataReceived);
-
-            //Texture2D texture = TextureGenerator.TextureFromHeightMap(mapData.heightMap);
-            ////meshRenderer.material.mainTexture = texture;
         }
 
         void OnMeshDataReceived(MeshData meshData)
@@ -197,7 +221,7 @@ public class EndlessTerrain : MonoBehaviour
         {
             onChunkDeleted?.Invoke();
             onChunkDeleted = null;
-            Destroy(meshObject);
+            _killAction(this);
         }
 
         public bool InDeleteZone()
@@ -210,6 +234,16 @@ public class EndlessTerrain : MonoBehaviour
         public Vector2 GetCoord()
         {
             return coord;
+        }
+
+        public void Destroy()
+        {
+            if (meshObject != null)
+            {
+                onChunkDeleted?.Invoke();
+                onChunkDeleted = null;
+                GameObject.Destroy(meshObject);
+            }
         }
     }
 }
