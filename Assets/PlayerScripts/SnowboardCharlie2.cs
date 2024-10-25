@@ -98,11 +98,10 @@ public class SnowboardCharlie2 : MonoBehaviour
         m_UpdateHandler?.Invoke();
     }
     private void OnGrounded() {
-        if (trailRenderer != null)
-        {
-            trailRenderer.emitting = true; // Enable trail when grounded
-        }
         manager.ScoreTrick(false);
+        AudioManager audioManager = FindObjectOfType<AudioManager>();
+        audioManager.FadeIn("Background", .2f);
+        audioManager.FadeOut("Strong Wind", .1f);
     }
     private void GroundedBehavior()
     {
@@ -145,11 +144,10 @@ public class SnowboardCharlie2 : MonoBehaviour
     }
     private void OnMidair()
     {
-        if (trailRenderer != null)
-        {
-            trailRenderer.emitting = false;
-        }
         manager.ScoreTrick(true);
+        AudioManager audioManager = FindObjectOfType<AudioManager>();
+        audioManager.FadeOut("Background", .2f);
+        audioManager.FadeIn("Strong Wind", .1f);
         rb.AddTorque(transform.up * airSommersault * xInput * tiltingFactor * 10f, ForceMode.Impulse);
         rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 10f, ForceMode.Impulse);
     }
