@@ -1426,12 +1426,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!4 &863215492 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5504875660417381156, guid: e6b53f5daab214771ad77c653dc3f8c1,
-    type: 3}
-  m_PrefabInstance: {fileID: 6524010418884493309}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &921326017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1516,6 +1510,12 @@ Transform:
   - {fileID: 322230157}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -17.62, y: 0, z: 0}
+--- !u!4 &1044315081 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 22224663328248763, guid: e6b53f5daab214771ad77c653dc3f8c1,
+    type: 3}
+  m_PrefabInstance: {fileID: 6524010418884493309}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1052497790
 GameObject:
   m_ObjectHideFlags: 0
@@ -7493,13 +7493,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2139144647}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.077, y: 0.055, z: -0.79}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.029336803, y: -0.025742417, z: 0.002673741, w: 0.9992345}
+  m_LocalPosition: {x: 0.00001, y: -0.00626, z: 0.00008}
+  m_LocalScale: {x: 0.008333334, y: 0.008333333, z: 0.008333336}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 863215492}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 1044315081}
+  m_LocalEulerAnglesHint: {x: 3.369, y: -2.945, z: 0.22}
 --- !u!96 &2139144649
 TrailRenderer:
   serializedVersion: 3
@@ -7521,7 +7521,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1a0a69f10c68e894a9881abbc390e2ae, type: 2}
+  - {fileID: 2100000, guid: a6e87483be1dd1f43b0b82aef54d002e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7564,8 +7564,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.5613208, g: 0.37744784, b: 0.18534178, a: 1}
-      key1: {r: 0.579384, g: 0.40308234, b: 0.21888652, a: 1}
+      key0: {r: 0.3066038, g: 0.20676774, b: 0.10268335, a: 0.24313726}
+      key1: {r: 0.3066038, g: 0.21110448, b: 0.1113608, a: 0.2}
       key2: {r: 1, g: 1, b: 1, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -7580,7 +7580,7 @@ TrailRenderer:
       ctime5: 0
       ctime6: 0
       ctime7: 0
-      atime0: 0
+      atime0: 482
       atime1: 65535
       atime2: 0
       atime3: 0
@@ -7594,10 +7594,10 @@ TrailRenderer:
       m_NumAlphaKeys: 2
     numCornerVertices: 0
     numCapVertices: 0
-    alignment: 0
-    textureMode: 0
+    alignment: 1
+    textureMode: 1
     textureScale: {x: 1, y: 1}
-    shadowBias: 0.5
+    shadowBias: 0
     generateLightingData: 0
   m_MinVertexDistance: 0.5
   m_MaskInteraction: 0
@@ -7717,7 +7717,7 @@ PrefabInstance:
         type: 3}
       insertIndex: 1
       addedObject: {fileID: 1732824612}
-    - targetCorrespondingSourceObject: {fileID: 5504875660417381156, guid: e6b53f5daab214771ad77c653dc3f8c1,
+    - targetCorrespondingSourceObject: {fileID: 22224663328248763, guid: e6b53f5daab214771ad77c653dc3f8c1,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2139144648}
