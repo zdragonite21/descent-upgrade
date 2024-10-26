@@ -795,7 +795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trees:
-  - {fileID: 7240699082658757291, guid: 87ff3e2464c9c484da344b2d87034929, type: 3}
+  - {fileID: 8893904840502818954, guid: d2c5091b47951ec4393d993f18b7ee18, type: 3}
   lRocks:
   - {fileID: 7573587040796546882, guid: f704b409c7b155c4fae0cb9d5c79156f, type: 3}
   - {fileID: -2436488614963385204, guid: f704b409c7b155c4fae0cb9d5c79156f, type: 3}
@@ -811,13 +811,13 @@ MonoBehaviour:
   treeDist: 1
   lRockDist: 0.431
   sRockDist: 0.632
-  scatterChance: 0
+  scatterChance: 0.07
   globalScale: 1
-  heightRangeT: {x: -10, y: 0}
+  heightRangeT: {x: -1, y: 0}
   heightRangeR: {x: 1, y: 2}
-  scaleRangeT: {x: 0.5, y: 2.5}
+  scaleRangeT: {x: 1.5, y: 3.5}
   scaleRangeR: {x: 0.8, y: 1.2}
-  probMapStrength: 2
+  probMapStrength: 4
 --- !u!1 &705477739
 GameObject:
   m_ObjectHideFlags: 0
@@ -7597,10 +7597,50 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2657921871961372020, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.14117648
+      objectReference: {fileID: 0}
+    - target: {fileID: 2657921871961372020, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.37254903
+      objectReference: {fileID: 0}
+    - target: {fileID: 2657921871961372020, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.5372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 2657921871961372020, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4280573833
+      objectReference: {fileID: 0}
     - target: {fileID: 2660399413097014534, guid: 794ee4edf91d9452990dc24f54c1f2ae,
         type: 3}
       propertyPath: mainGameSceneName
       value: Sand Dunes
+      objectReference: {fileID: 0}
+    - target: {fileID: 3435371959829222733, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.14117648
+      objectReference: {fileID: 0}
+    - target: {fileID: 3435371959829222733, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.37254903
+      objectReference: {fileID: 0}
+    - target: {fileID: 3435371959829222733, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.5372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 3435371959829222733, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4280573833
       objectReference: {fileID: 0}
     - target: {fileID: 3634448112159805929, guid: 794ee4edf91d9452990dc24f54c1f2ae,
         type: 3}
@@ -7706,6 +7746,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424764501473006688, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.14204341
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424764501473006688, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.37099752
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424764501473006688, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.5377358
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424764501473006688, guid: 794ee4edf91d9452990dc24f54c1f2ae,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4280573833
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
