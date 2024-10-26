@@ -83,7 +83,13 @@ public static class Noise
                     float sampleY = (y - halfHeight + octaveOffsets[i].y) / scale * frequency;
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
+                    //float perlinSandValue = Mathf.PerlinNoise(sampleX / 2 + seed, sampleY / 2 + seed) * 2 - 1;
+                    
+                    //perlinValue = Mathf.Abs(perlinValue);
+                    //perlinValue = Mathf.Lerp(1, 0, perlinValue);
+
                     noiseHeight += perlinValue * amplitude;
+                    //noiseHeight += perlinSandValue * amplitude;
 
                     amplitude *= persistance;
                     frequency *= lacunarity;
