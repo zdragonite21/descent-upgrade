@@ -34,6 +34,7 @@ public class SnowboardCharlie2 : MonoBehaviour
                 case PlayerState.Grounded:
                     OnGrounded();
                     m_UpdateHandler = GroundedBehavior;
+                    m_FixedUpdateHandler = FixedGroundedBehavior;
                     break;
                 case PlayerState.Midair:
                     OnMidair();
@@ -49,6 +50,7 @@ public class SnowboardCharlie2 : MonoBehaviour
     private PlayerState m_CurrentState;
     private delegate void UpdateHandler();
     private UpdateHandler m_UpdateHandler;
+    private UpdateHandler m_FixedUpdateHandler;
     private Quaternion groundTargetRotation;
     public enum PlayerState
     {
@@ -83,6 +85,7 @@ public class SnowboardCharlie2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Animations
         if (m_CurrentState == PlayerState.Midair)
             animCrouchBlend = Mathf.Lerp(animCrouchBlend, 1f, 3f * Time.deltaTime);
         else if (Input.GetButton("Jump"))
@@ -97,6 +100,12 @@ public class SnowboardCharlie2 : MonoBehaviour
         yInput = Input.GetAxis("Vertical");
         m_UpdateHandler?.Invoke();
     }
+    void FixedUpdate() {
+        rbv = rb.velocity;
+        stateTimeCounter++;
+        m_FixedUpdateHandler?.Invoke();
+    }
+
     private void OnGrounded() {
         manager.ScoreTrick(false);
         AudioManager audioManager = FindObjectOfType<AudioManager>();
@@ -122,13 +131,8 @@ public class SnowboardCharlie2 : MonoBehaviour
         } else {
             currGroundState = GroundState.Sliding;
         }
-        SetSlopeSlideVelocity();
-        rb.velocity += transform.right * xInput * sideLeanForce * Time.deltaTime;
-        float xVel = rb.velocity.x;
-        currentAutoSpeed = Mathf.Clamp(currentAutoSpeed + Time.deltaTime * yInput, autoSpeed, fasterAutoSpeed);
-        
-        rb.velocity += transform.forward * currentAutoSpeed * Time.deltaTime;
-        rb.velocity += transform.forward * Time.deltaTime;
+        AlignTerrain();
+
         // Jumps
         
         if (Input.GetKeyUp(KeyCode.Space))
@@ -142,6 +146,18 @@ public class SnowboardCharlie2 : MonoBehaviour
             animCrouchBlend = 0f;
         }
     }
+
+    private void FixedGroundedBehavior()
+    {
+        AddSlopeVelocity();
+        rb.velocity += transform.right * xInput * sideLeanForce * Time.fixedDeltaTime;
+        float xVel = rb.velocity.x;
+        currentAutoSpeed = Mathf.Clamp(currentAutoSpeed + Time.fixedDeltaTime * yInput, autoSpeed, fasterAutoSpeed);
+        
+        rb.velocity += transform.forward * currentAutoSpeed * Time.fixedDeltaTime;
+        rb.velocity += transform.forward * Time.fixedDeltaTime;
+    }   
+
     private void OnMidair()
     {
         manager.ScoreTrick(true);
@@ -168,61 +184,75 @@ public class SnowboardCharlie2 : MonoBehaviour
             rb.AddTorque(transform.up * xInput * airSommersault * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.y) / maxAngVel, ForceMode.VelocityChange);
         }
     }
-    private void SetSlopeSlideVelocity()
+    private void AlignTerrain()
     {
-        float directionalForce = 0f;
-        float angle = 0f;
-
         if (Physics.Raycast(transform.position + Vector3.up + transform.forward, Vector3.down, out RaycastHit hitInfo, 5f, playerGrounded.layerMask))
         {
             groundTargetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
             if (currGroundState == GroundState.Straightening) {
                 transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, Time.deltaTime * tiltingFactor);  
             }
-            angle = Vector3.Angle(hitInfo.normal, Vector3.up); // Angle from ground up
-            directionalForce = gravityScale * Mathf.Abs(Mathf.Sin(angle));
         }
         // Flat Rotation
         groundTargetRotation = Quaternion.FromToRotation(transform.forward, (Vector3.right * xInput)) * transform.rotation;
        
         if (currGroundState == GroundState.Sliding) {
             groundTargetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
-            // Adhere to normals
             transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
         }
         if (currGroundState == GroundState.Carving) {
             groundTargetRotation = Quaternion.FromToRotation(transform.TransformDirection(-1 * xInput, 1, 0), hitInfo.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
-            if (stateTimeCounter < 100) {
-                rb.AddForce(rb.velocity * -1f * Mathf.Abs(xInput));
-            } 
         }
         if (currGroundState == GroundState.Drifting) {
             groundTargetRotation = Quaternion.FromToRotation(transform.TransformDirection(-1 *xInput, 1, 0), hitInfo.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
-            if (stateTimeCounter < 100) {
-                rb.AddForce(rb.velocity *0.2f * Mathf.Abs(xInput));
-            } else {
-                rb.AddForce(rb.velocity *-0.5f * Mathf.Abs(xInput));
-            }
         }
-
         if (currGroundState == GroundState.Shortturning) {
             groundTargetRotation = Quaternion.FromToRotation(transform.TransformDirection(-0.75f *xInput, 1, 0), hitInfo.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 45 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
-            if (stateTimeCounter < 100) {
-                rb.AddForce(rb.velocity *0.3f * Mathf.Abs(xInput));
-            }
         }
         if (currGroundState == GroundState.Straightening) {
             groundTargetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 0 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
         }
+    }
 
+    private void AddSlopeVelocity() {
+        float directionalForce = 0f;
+        float angle = 0f;
+
+        if (Physics.Raycast(transform.position + Vector3.up + transform.forward, Vector3.down, out RaycastHit hitInfo, 5f, playerGrounded.layerMask))
+        {
+            groundTargetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
+            angle = Vector3.Angle(hitInfo.normal, Vector3.up); // Angle from ground up
+            directionalForce = gravityScale * Mathf.Abs(Mathf.Sin(angle));
+        }
+        // Flat Rotation
+        groundTargetRotation = Quaternion.FromToRotation(transform.forward, (Vector3.right * xInput)) * transform.rotation;
+
+        if (currGroundState == GroundState.Carving) {
+            if (stateTimeCounter < 100) {
+                //rb.velocity += rb.velocity * -1f * Mathf.Abs(xInput) * Time.fixedDeltaTime;
+                rb.AddForce(rb.velocity * -1f * Mathf.Abs(xInput));
+            } 
+        }
+        if (currGroundState == GroundState.Drifting) {
+            if (stateTimeCounter < 50) {
+                rb.AddForce(rb.velocity *0.4f * Mathf.Abs(xInput));
+            } else {
+                rb.AddForce(rb.velocity *-0.5f * Mathf.Abs(xInput));
+            }
+        }
+        if (currGroundState == GroundState.Shortturning) {
+            if (stateTimeCounter < 100) {
+                rb.AddForce(rb.velocity *0.3f * Mathf.Abs(xInput));
+            }
+        }
         // Diagonal Gravity
         rb.velocity += directionalForce * Vector3.down * Time.fixedDeltaTime;
         // Horizontal "Gravity" to make the player go up slopes
@@ -230,10 +260,6 @@ public class SnowboardCharlie2 : MonoBehaviour
         {
             rb.velocity += Mathf.Abs(Mathf.Cos(angle)) * transform.forward * Time.fixedDeltaTime * currentAutoSpeed;
         }
-
     }
-    void FixedUpdate(){
-        rbv = rb.velocity;
-        stateTimeCounter++;
-    }
+    
 }

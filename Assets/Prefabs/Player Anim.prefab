@@ -10876,12 +10876,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c180652e70a4f943ba6c410042c8773, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoSpeed: 10
-  fasterAutoSpeed: 15
+  autoSpeed: 12
+  fasterAutoSpeed: 24
   sideLeanForce: 10
   tiltingFactor: 3
-  gravityScale: 15
-  jumpForce: 10
+  gravityScale: 20
+  jumpForce: 15
   airSpinSpeed: 8
   airSommersault: 3.5
   rotationAdjustionFactor: 10
@@ -10974,8 +10974,8 @@ Rigidbody:
   m_GameObject: {fileID: 6253937640072739063}
   serializedVersion: 4
   m_Mass: 10
-  m_Drag: 0.1
-  m_AngularDrag: 0.3
+  m_Drag: 0.15
+  m_AngularDrag: 0.2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}

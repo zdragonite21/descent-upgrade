@@ -7572,6 +7572,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Anim
       objectReference: {fileID: 0}
+    - target: {fileID: 7230607631617418342, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Drag
+      value: 0.15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8317186188552279870, guid: e6b53f5daab214771ad77c653dc3f8c1, type: 3}
