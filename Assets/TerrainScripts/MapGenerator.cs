@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System;
 using System.Threading;
 using System.Collections.Generic;
@@ -7,6 +6,8 @@ using System.Collections.Generic;
 public class MapGenerator : MonoBehaviour {
     public enum DrawMode { NoiseMap, Mesh };
     public DrawMode drawMode;
+    
+    public Noise.BiomeMode biomeMode;
 
     public Noise.NormalizeMode normalizeMode;
 
@@ -113,7 +114,7 @@ public class MapGenerator : MonoBehaviour {
     {
         float[,] noiseMap;
         float[,] probMap;
-        (noiseMap, probMap) = Noise.GenerateNoiseMap(mapChunkSize + levelOfDetail*2, mapChunkSize + levelOfDetail*2, seed, noiseScale, octaves, persistance, lacunarity, slope, centre + offset, normalizeMode, probabilityCurve);
+        (noiseMap, probMap) = Noise.GenerateNoiseMap(mapChunkSize + levelOfDetail*2, mapChunkSize + levelOfDetail*2, seed, noiseScale, octaves, persistance, lacunarity, slope, centre + offset, normalizeMode, biomeMode, probabilityCurve);
 
         return new MapData(noiseMap, probMap);
     }

@@ -8,17 +8,19 @@ public static class Noise
 
     public enum NormalizeMode { Local, Global };
 
-    public static (float[,], float[,]) GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, float slope, Vector2 offset, NormalizeMode normalizeMode, AnimationCurve probCurve)
+    public enum BiomeMode { Sand, Snow };
+
+    public static (float[,], float[,]) GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, float slope, Vector2 offset, NormalizeMode normalizeMode, BiomeMode biomeMode, AnimationCurve probCurve)
     {
         float halfWidth = mapWidth / 2f;
         Func<int, int, float, float> slopeFunc = (x, y, height) => (y - halfWidth - offset.y) / mapHeight * slope + height;
         static double LogisticFunc(double x, double k, double x0) => 1 / (1 + Math.Exp(-k * (x - x0)));
 
 
-        float[,] heightMap = NoiseMap(mapWidth, mapHeight, seed, scale, octaves, persistance, lacunarity, offset, normalizeMode, slopeFunc);
-        float[,] probMap = NoiseMap(mapWidth, mapHeight, seed, scale, octaves, persistance, lacunarity, offset, NormalizeMode.Local);
+        float[,] heightMap = NoiseMap(mapWidth, mapHeight, seed, scale, octaves, persistance, lacunarity, offset, normalizeMode, biomeMode, slopeFunc);
+        float[,] probMap = NoiseMap(mapWidth, mapHeight, seed, scale, octaves, persistance, lacunarity, offset, NormalizeMode.Local, biomeMode);
 
-        float[,] treeProbMap = NoiseMap(mapWidth, mapHeight, seed+1, scale/1.5f, 1, persistance, lacunarity, offset, NormalizeMode.Local, (x, y, h) => h);
+        float[,] treeProbMap = NoiseMap(mapWidth, mapHeight, seed+1, scale/1.5f, 1, persistance, lacunarity, offset, NormalizeMode.Local, biomeMode, (x, y, h) => h);
 
         for (int i = 0; i < probMap.GetLength(0); i++)
         {
@@ -31,7 +33,7 @@ public static class Noise
         return (heightMap, probMap);    
     }
 
-    static float[,] NoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode, Func<int, int, float, float> func = null)
+    static float[,] NoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode, BiomeMode biomeMode, Func<int, int, float, float> func = null)
     {
         if (func == null)
         {
@@ -83,13 +85,19 @@ public static class Noise
                     float sampleY = (y - halfHeight + octaveOffsets[i].y) / scale * frequency;
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
-                    //float perlinSandValue = Mathf.PerlinNoise(sampleX / 2 + seed, sampleY / 2 + seed) * 2 - 1;
-                    
-                    //perlinValue = Mathf.Abs(perlinValue);
-                    //perlinValue = Mathf.Lerp(1, 0, perlinValue);
+
+                    // Sand Stuff
+                    if (biomeMode == BiomeMode.Sand)
+                    {
+                        float sampleSandX = (x - halfWidth + octaveOffsets[i].x + seed) / scale * frequency / 2;
+                        float sampleSandY = (y - halfWidth + octaveOffsets[i].y + seed) / scale * frequency / 2;
+                        float perlinSandValue = Mathf.PerlinNoise(sampleSandX, sampleSandY) * 2 - 1;
+                        perlinValue = Mathf.Abs(perlinValue);
+                        perlinValue = Mathf.Lerp(1, 0, perlinValue);
+                        noiseHeight += perlinSandValue;
+                    }
 
                     noiseHeight += perlinValue * amplitude;
-                    //noiseHeight += perlinSandValue * amplitude;
 
                     amplitude *= persistance;
                     frequency *= lacunarity;
