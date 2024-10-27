@@ -96,7 +96,7 @@ public class MapGenerator : MonoBehaviour {
             for (int i = 0; i < mapDataThreadInfoQueue.Count; i++)
             {
                 MapThreadInfo<MapData> threadInfo = mapDataThreadInfoQueue.Dequeue();
-                threadInfo.callback(threadInfo.parameter);
+                threadInfo.callback?.Invoke(threadInfo.parameter);
             }
         }
 
@@ -105,7 +105,7 @@ public class MapGenerator : MonoBehaviour {
             for (int i = 0; i < meshDataThreadInfoQueue.Count; i++)
             {
                 MapThreadInfo<MeshData> threadInfo = meshDataThreadInfoQueue.Dequeue();
-                threadInfo.callback(threadInfo.parameter);
+                threadInfo.callback?.Invoke(threadInfo.parameter);
             }
         }
     }
