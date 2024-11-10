@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.GraphicsBuffer;
@@ -116,21 +118,32 @@ public class SnowboardCharlie2 : MonoBehaviour
     {
         //print("IN Ground");
         // Get player input for movement
-        if (xInput != 0 && yInput < 0 && currGroundState != GroundState.Carving) {
-            currGroundState = GroundState.Carving;
-            stateTimeCounter = 0;
-        } else if (xInput != 0 && yInput == 0 && currGroundState != GroundState.Drifting){
-            currGroundState = GroundState.Drifting;
-            stateTimeCounter = 0;
-        } else if (xInput != 0 && yInput > 0 && currGroundState != GroundState.Shortturning) {
-            currGroundState = GroundState.Shortturning;
-            stateTimeCounter = 0;
-        } else if (xInput == 0 && yInput != 0) {
-            currGroundState = GroundState.Straightening;
-            stateTimeCounter = 0;
-        } else {
-            currGroundState = GroundState.Sliding;
+        if (yInput < 0) {
+            if (xInput != 0 && yInput < 0 && currGroundState != GroundState.Carving) {
+                currGroundState = GroundState.Carving;
+                stateTimeCounter = 0;
+            } else if (xInput == 0) {
+                currGroundState = GroundState.Straightening;
+                stateTimeCounter = 0;
+            }
+        } else if (yInput == 0) {
+            if (xInput != 0 && currGroundState != GroundState.Drifting){
+                currGroundState = GroundState.Drifting;
+                stateTimeCounter = 0;
+            } else if (xInput == 0 && currGroundState != GroundState.Sliding) {
+                currGroundState = GroundState.Sliding;
+                stateTimeCounter = 0;
+            }
+        } else if (yInput > 0) {
+            if (xInput != 0 && currGroundState != GroundState.Shortturning) {
+                currGroundState = GroundState.Shortturning;
+                stateTimeCounter = 0;
+            } else if (xInput == 0 && currGroundState != GroundState.Sliding) {
+                currGroundState = GroundState.Sliding;
+                stateTimeCounter = 0;
+            }
         }
+        
         AlignTerrain();
 
         // Jumps
@@ -194,24 +207,51 @@ public class SnowboardCharlie2 : MonoBehaviour
             }
         }
         // Flat Rotation
-        groundTargetRotation = Quaternion.FromToRotation(transform.forward, (Vector3.right * xInput)) * transform.rotation;
-       
+        groundTargetRotation = Quaternion.FromToRotation(transform.forward, Vector3.right * xInput) * transform.rotation;
+        float hity = hitInfo.normal.y;
+        float hitz = hitInfo.normal.z;
+        float hitx = hitInfo.normal.x;
+        float hypoxz = hitx * hitx + hitz * hitz;
+        float hypo = hity * hity + hitz * hitz;
+        float theta = Mathf.Atan(hity/hitz) * Mathf.Rad2Deg;
+        float phi = Mathf.Atan(hitx/hitz) * Mathf.Rad2Deg;
+        //print(phi);
+        float newAngle = (theta + 45) * Mathf.Deg2Rad;
+        float pos = hitInfo.normal.x/Math.Abs(hitInfo.normal.x);
+        Vector3 normal2 = new Vector3(hitInfo.normal.x, hypo * Mathf.Sin(newAngle), hypo * Mathf.Cos(newAngle));
+
+
         if (currGroundState == GroundState.Sliding) {
             groundTargetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
         }
         if (currGroundState == GroundState.Carving) {
-            groundTargetRotation = Quaternion.FromToRotation(transform.TransformDirection(-1 * xInput, 1, 0), hitInfo.normal) * transform.rotation;
-            transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
+            // print(transform.up);
+            // print(transform.TransformDirection(-1, 1,0));
+            if (hitInfo.normal.x < 0) { 
+                groundTargetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
+            } else {
+                groundTargetRotation = Quaternion.FromToRotation(transform.up, normal2) * transform.rotation;
+            }
+            transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, tiltingFactor * Time.fixedDeltaTime);
+            //transform.rotation = Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
         }
         if (currGroundState == GroundState.Drifting) {
-            groundTargetRotation = Quaternion.FromToRotation(transform.TransformDirection(-1 *xInput, 1, 0), hitInfo.normal) * transform.rotation;
-            transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
+            if (hitInfo.normal.x < 0) { 
+                groundTargetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
+            } else {
+                groundTargetRotation = Quaternion.FromToRotation(transform.up, normal2) * transform.rotation;
+            }
+            transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, tiltingFactor * Time.fixedDeltaTime);
+            //transform.rotation = Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
-        }
+        //     groundTargetRotation = Quaternion.FromToRotation(transform.TransformDirection(1, 1, 0), normal2) * transform.rotation;
+        //     transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
+        //     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
+            }
         if (currGroundState == GroundState.Shortturning) {
-            groundTargetRotation = Quaternion.FromToRotation(transform.TransformDirection(-0.75f *xInput, 1, 0), hitInfo.normal) * transform.rotation;
+            groundTargetRotation = Quaternion.FromToRotation(transform.TransformDirection(-0.75f * xInput, 1, 0), hitInfo.normal) * transform.rotation;
             transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 45 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
         }

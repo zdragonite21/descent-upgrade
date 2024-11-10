@@ -50,3 +50,6 @@ MonoBehaviour:
   pointTotalText: {fileID: 0}
   pointAddText: {fileID: 0}
   pointGradeText: {fileID: 0}
+  treeRunStacks: 0
+  treeRunMultiplier: 0.7
+  gmover: {fileID: 0}

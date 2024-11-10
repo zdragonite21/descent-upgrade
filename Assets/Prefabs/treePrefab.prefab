@@ -10,9 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 549200635049208483}
   - component: {fileID: 7240699082658757291}
+  - component: {fileID: 7517427094725053380}
+  - component: {fileID: 3945880261722018601}
   m_Layer: 0
   m_Name: treePrefab
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,6 +45,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 277126abbcc6973449e646c558a5a8ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &7517427094725053380
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2158959840213433108}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 24, z: 1}
+  m_Center: {x: 0, y: 12, z: 0}
+--- !u!114 &3945880261722018601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2158959840213433108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e36c7dee363dcc4eb6c9b78375e4bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &68680018697281566

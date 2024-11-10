@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,12 +21,18 @@ public class GameManager : MonoBehaviour
     private float timeTricking;
     private bool trickHSpin;
     private bool trickVSpin;
+    public float treeRunStacks;
+    public float treeRunMultiplier;
+    private bool treeRunActive;
+
+    private float pointTreeAdd;
     public GameOverScreen gmover;
 
     private void Start()
     {
         trickActive = false;
         pointAddText.gameObject.SetActive(false);
+        treeRunActive = false;
     }
 
     public void Setup(Rigidbody rb)
@@ -47,17 +54,36 @@ public class GameManager : MonoBehaviour
             trickHSpin = false;
             trickVSpin = false;
         }
-        else
+        else if (!treeRunActive)
         {
             pointTotal += Mathf.RoundToInt(pointTrickAdd);
             pointAddText.gameObject.SetActive(false);
             pointGradeText.gameObject.SetActive(false);
+            pointTotalText.text = pointTotal + "";
+        } else { 
+            pointTotal += Mathf.RoundToInt(pointTrickAdd);
             pointTotalText.text = pointTotal + "";
         }
     }
 
     private void Update()
     {
+         if (treeRunActive) {
+            timeTricking += Time.deltaTime;
+            if (player.velocity.magnitude > 10f) {
+                pointTreeAdd += Time.deltaTime * treeRunStacks * treeRunMultiplier;
+            }
+            pointAddText.text = "+" + Mathf.RoundToInt(pointTreeAdd);
+            string gradeText = "";
+            if (treeRunStacks > 30 && gradeText == "") {
+                gradeText = "GOOD";
+            } if (treeRunStacks > 60 && gradeText == "GOOD") {
+                gradeText = "GREAT";
+            } if (treeRunStacks > 90 && gradeText == "GREAT") {
+                gradeText = "EXCELLENT";
+            }
+            pointGradeText.text = gradeText;
+        } 
         if (trickActive)
         {
             timeTricking += Time.deltaTime;
@@ -67,7 +93,7 @@ public class GameManager : MonoBehaviour
                 trickHSpin = true;
             if (Mathf.Abs(player.angularVelocity.x) >= 4f)
                 trickVSpin = true;
-            pointTrickAdd += airScoreAdd * Time.deltaTime;
+                pointTrickAdd += airScoreAdd * Time.deltaTime;
             if (trickHSpin)
                 pointTrickAdd += spinScoreAdd * Time.deltaTime;
             if (trickVSpin)
@@ -82,10 +108,46 @@ public class GameManager : MonoBehaviour
                 gradeText = "EXCELLENT";
             pointGradeText.text = gradeText;
         }
+       
+        if (treeRunStacks <= 0 && treeRunActive) {
+            print("ENDING TREE RUN");
+           EndTreeRun();
+        }
+    }
+
+    void FixedUpdate() {
+        if (treeRunStacks > 0) {
+            treeRunStacks -= 0.1f + treeRunStacks * 0.1f; 
+        }
     }
 
     public void GameOver() {
         gmover.SetUp(pointTotal);
+    }
+
+    public void StackTreeRun() {
+        if (!treeRunActive) {
+            treeRunActive = true;
+            treeRunStacks = 5f;
+            pointTreeAdd = 0f; 
+            treeRunStacks = 0f;
+        }
+        pointAddText.gameObject.SetActive(true);
+        pointGradeText.gameObject.SetActive(true);
+        pointGradeText.text = "";
+        treeRunStacks += 15f;
+    }
+
+    public void EndTreeRun() {
+        pointTotal += Mathf.RoundToInt(pointTreeAdd);
+        pointTotalText.text = pointTotal + "";
+        treeRunActive = false; 
+        treeRunStacks = 0f;
+        pointTreeAdd = 0f;
+        if (!trickActive) {
+            pointAddText.gameObject.SetActive(false);
+            pointGradeText.gameObject.SetActive(false);
+        }
     }
 
     /*
