@@ -15,9 +15,6 @@ public class CameraMovement : MonoBehaviour
     public float maxCamFOV;
     public float midAirCamFOV;
 
-    [Tooltip("The factor by which the camera sticks more horizontally to the player")]
-    public float xFactor;
-
     public float minSpeedlinesEmission;
     public float maxSpeedlinesEmission;
 
@@ -110,12 +107,6 @@ public class CameraMovement : MonoBehaviour
     {
         // Scale the moveVel by the xFactor in the rightward direction to make x-axis adjust more
         float x = Vector3.Dot(Vector3.right, vectorToTarget);
-       // Vector3 v = Vector3.right * x *  Time.deltaTime * Mathf.Lerp(0f, 1f, (transform.position.x - target.position.x) / maxDistance);
-
-        if (distanceToTarget > maxDistance + x)
-        {
-            //transform.position += v;
-        }
 
         vectorToTarget = (target.position - this.transform.position);
         distanceToTarget = vectorToTarget.magnitude;
