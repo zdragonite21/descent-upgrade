@@ -52,6 +52,7 @@ public class Grounded : MonoBehaviour
                 {
                     IsGrounded = false;
                     playerMovement.CurrentState = SnowboardCharlie2.PlayerState.Midair;
+                    playerMovement.airTimeStart = Time.time;
                     cameraMovement.CurrentState = CameraMovement.CameraState.Midair;
                 } 
             }
