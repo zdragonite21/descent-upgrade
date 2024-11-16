@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class WeatherManager : MonoBehaviour
 {
+    public float distanceBeforeSpawning;
+
+    public Vector3 spawnOffset = new Vector3(0f, 15f, 100f); 
 
     public GameObject snowParticlePrefab;
     public Transform playerTransform;
-
-    public GameObject[] weatherObjects;
 
     
     public WeatherState CurrentWeather
@@ -47,14 +48,26 @@ public class WeatherManager : MonoBehaviour
 
     Vector3 lastPos;
 
+    private void Start()
+    {
+        CurrentWeather = WeatherState.Snow;
+    }
+
 
     #region Snow
     void OnSnow()
     {
+        lastPos = playerTransform.position;
     }
 
     void SnowBehavior()
     {
+        if ((playerTransform.position - lastPos).sqrMagnitude > distanceBeforeSpawning * distanceBeforeSpawning)
+        {
+            GameObject newSnow = Instantiate(snowParticlePrefab, playerTransform.position + spawnOffset, Quaternion.identity);
+            newSnow.GetComponent<DestroyWhenFarFromTarget>().target = playerTransform;
+            lastPos = playerTransform.position;
+        }
     }
     #endregion
 

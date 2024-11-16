@@ -131,7 +131,7 @@ public class CameraMovement : MonoBehaviour
     {
         Quaternion targetRotation = Quaternion.Euler(target.transform.rotation.eulerAngles.x - 20f, 0f, 0f);
 
-        //rb.rotation = Quaternion.RotateTowards(rb.rotation, targetRotation, 10f * Time.deltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10f * Time.deltaTime);
     }
 
     private void OnGrounded()
