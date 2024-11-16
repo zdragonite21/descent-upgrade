@@ -182,7 +182,7 @@ public class SnowboardCharlie2 : MonoBehaviour
         audioManager.FadeOut("Background", .2f);
         audioManager.FadeIn("Strong Wind", .1f);
         rb.AddTorque(transform.up * airSommersault * xInput * tiltingFactor * 10f, ForceMode.Impulse);
-            rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 10f, ForceMode.Impulse);
+        rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 10f, ForceMode.Impulse);
         
     }
     private void MidairBehavior()
@@ -195,15 +195,9 @@ public class SnowboardCharlie2 : MonoBehaviour
         rb.rotation = Quaternion.Lerp(transform.rotation, targetRotation,
             Time.fixedDeltaTime * tiltingFactor * 0.5f);
         float maxAngVel = 7f;
-
-        if (Time.time < airTimeStart + 0.75f) {
-            rb.AddTorque(transform.up * airSommersault * xInput * tiltingFactor * 200f, ForceMode.Impulse);
-            rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 200f, ForceMode.Impulse);
-        } else if (rb.angularVelocity.magnitude < maxAngVel)
-        {
-            rb.AddTorque(transform.right * yInput * airSpinSpeed * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.x) / maxAngVel, ForceMode.VelocityChange);
-            rb.AddTorque(transform.up * xInput * airSommersault * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.y) / maxAngVel, ForceMode.VelocityChange);
-        }
+        rb.AddTorque(transform.right * yInput * airSpinSpeed * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.x) / maxAngVel, ForceMode.VelocityChange);
+        rb.AddTorque(transform.up * xInput * airSommersault * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.y) / maxAngVel, ForceMode.VelocityChange);
+    
         
     }
     private void AlignTerrain()
@@ -324,5 +318,4 @@ public class SnowboardCharlie2 : MonoBehaviour
             thinTrail.emitting = true;
         }
     }
-
 }
