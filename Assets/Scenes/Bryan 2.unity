@@ -2127,7 +2127,12 @@ PrefabInstance:
     - target: {fileID: 8555560249573640151, guid: e6b53f5daab214771ad77c653dc3f8c1,
         type: 3}
       propertyPath: tiltingFactor
-      value: 8
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8555560249573640151, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: rotationAdjustionFactor
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
