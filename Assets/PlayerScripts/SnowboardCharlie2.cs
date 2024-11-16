@@ -19,6 +19,7 @@ public class SnowboardCharlie2 : MonoBehaviour
     public float airSpinSpeed;
     public float airSommersault;
     public float rotationAdjustionFactor;
+    public float airTimeStart;
     [Header("References")]
     public Animator animator;
     public Grounded playerGrounded;
@@ -178,7 +179,8 @@ public class SnowboardCharlie2 : MonoBehaviour
         audioManager.FadeOut("Background", .2f);
         audioManager.FadeIn("Strong Wind", .1f);
         rb.AddTorque(transform.up * airSommersault * xInput * tiltingFactor * 10f, ForceMode.Impulse);
-        rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 10f, ForceMode.Impulse);
+            rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 10f, ForceMode.Impulse);
+        
     }
     private void MidairBehavior()
     {
@@ -191,15 +193,19 @@ public class SnowboardCharlie2 : MonoBehaviour
             Time.fixedDeltaTime * tiltingFactor * 0.5f);
         float maxAngVel = 7f;
 
-        if (rb.angularVelocity.magnitude < maxAngVel)
+        if (Time.time < airTimeStart + 0.75f) {
+            rb.AddTorque(transform.up * airSommersault * xInput * tiltingFactor * 200f, ForceMode.Impulse);
+            rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 200f, ForceMode.Impulse);
+        } else if (rb.angularVelocity.magnitude < maxAngVel)
         {
             rb.AddTorque(transform.right * yInput * airSpinSpeed * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.x) / maxAngVel, ForceMode.VelocityChange);
             rb.AddTorque(transform.up * xInput * airSommersault * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.y) / maxAngVel, ForceMode.VelocityChange);
         }
+        
     }
     private void AlignTerrain()
     {
-        if (Physics.Raycast(transform.position + Vector3.up + transform.forward, Vector3.down, out RaycastHit hitInfo, 5f, playerGrounded.layerMask))
+        if (Physics.Raycast(transform.position + transform.forward, Vector3.down, out RaycastHit hitInfo, 5f, playerGrounded.layerMask))
         {
             groundTargetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
             if (currGroundState == GroundState.Straightening) {
@@ -228,7 +234,7 @@ public class SnowboardCharlie2 : MonoBehaviour
         if (currGroundState == GroundState.Carving) {
             // print(transform.up);
             // print(transform.TransformDirection(-1, 1,0));
-            if (hitInfo.normal.x < 0) { 
+            if (hitInfo.normal.x < -0.5f) { 
                 groundTargetRotation = Quaternion.FromToRotation(transform.up, hitInfo.normal) * transform.rotation;
             } else {
                 groundTargetRotation = Quaternion.FromToRotation(transform.up, normal2) * transform.rotation;
