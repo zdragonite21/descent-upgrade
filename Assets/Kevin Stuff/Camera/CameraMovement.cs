@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Runtime.Serialization;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -25,6 +26,8 @@ public class CameraMovement : MonoBehaviour
     public Transform target;
     public Transform camTransform;
     public Camera cameraValues;
+
+    public Rigidbody rb;
 
     public ParticleSystem speedlines;
 
@@ -93,7 +96,7 @@ public class CameraMovement : MonoBehaviour
     private void Update()
     {
 
-        vectorToTarget = (target.position - this.transform.position);
+        vectorToTarget = (target.position - this.rb.position);
         distanceToTarget = vectorToTarget.magnitude;
 
         m_UpdateHandler?.Invoke();
@@ -108,7 +111,7 @@ public class CameraMovement : MonoBehaviour
         // Scale the moveVel by the xFactor in the rightward direction to make x-axis adjust more
         float x = Vector3.Dot(Vector3.right, vectorToTarget);
 
-        vectorToTarget = (target.position - this.transform.position);
+        vectorToTarget = (target.position - this.rb.position);
         distanceToTarget = vectorToTarget.magnitude;
 
         Vector3 moveVel = Time.deltaTime * maxMovementSpeed * Mathf.Lerp(0f,
@@ -119,10 +122,10 @@ public class CameraMovement : MonoBehaviour
         // Cap max distance
         if (distanceToTarget > maxDistance)  //Using sqrmag is more performant
         {
-            this.transform.position = target.position - vectorToTarget.normalized * maxDistance;
+            this.rb.position = target.position - vectorToTarget.normalized * maxDistance;
         }
 
-        transform.position += moveVel;
+        rb.velocity = moveVel;
 
     }
 
@@ -130,7 +133,7 @@ public class CameraMovement : MonoBehaviour
     {
         Quaternion targetRotation = Quaternion.Euler(target.transform.rotation.eulerAngles.x - 20f, 0f, 0f);
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 5f * Time.deltaTime);
+        //rb.rotation = Quaternion.RotateTowards(rb.rotation, targetRotation, 10f * Time.deltaTime);
     }
 
     private void OnGrounded()
@@ -170,7 +173,6 @@ public class CameraMovement : MonoBehaviour
 
         ChangeSpeedlinesEmission(Mathf.Lerp(minSpeedlinesEmission, maxSpeedlinesEmission, camSpeed / maxMovementSpeed), 0.0f);
         // Rotation
-        //this.transform.forward = target.forward;
     }
 
     private void OnMidair()
@@ -242,6 +244,15 @@ public class CameraMovement : MonoBehaviour
     }
 
     #endregion
+
+
+
+    private void OnCollisionStay(Collision collision)
+    {
+        rb.position += new Vector3(0f, Time.deltaTime, 0f);
+
+        print("HI");
+    }
 }
 
 

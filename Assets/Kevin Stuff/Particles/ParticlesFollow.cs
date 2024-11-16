@@ -7,6 +7,8 @@ public class ParticlesFollow : MonoBehaviour
     public SnowboardCharlie2 playerMovement;
     public Transform target;
 
+    public bool freezeRotation;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +40,8 @@ public class ParticlesFollow : MonoBehaviour
         }
 
         transform.position = target.position;
-        transform.forward = Vector3.RotateTowards(transform.forward, target.forward, 10f * Time.deltaTime, 0f);
+
+        if (!freezeRotation)
+            transform.forward = Vector3.RotateTowards(transform.forward, target.forward, 10f * Time.deltaTime, 0f);
     }
 }

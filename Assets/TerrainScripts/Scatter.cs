@@ -27,10 +27,12 @@ public class Scatter : MonoBehaviour
     public Vector2 scaleRangeR = new Vector2(0.8f, 1.2f);
     public float probMapStrength = 2f;
 
+    public Transform treeParent;
+
     private void Start()
     {
         treePool = new ObjectPool<ScatterObject>(
-            createFunc: () => Instantiate(trees[0]),
+            createFunc: () => Instantiate(trees[0], treeParent),
             actionOnGet: obj => obj.gameObject.SetActive(true),
             actionOnRelease: obj => obj.gameObject.SetActive(false),
             actionOnDestroy: obj => Destroy(obj.gameObject),

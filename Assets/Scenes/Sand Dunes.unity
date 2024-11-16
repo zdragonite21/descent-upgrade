@@ -428,96 +428,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sand Particles
       objectReference: {fileID: 0}
-    - target: {fileID: 2635900548373629414, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.b
-      value: 0.34603062
-      objectReference: {fileID: 0}
-    - target: {fileID: 2635900548373629414, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.g
-      value: 0.6581315
-      objectReference: {fileID: 0}
-    - target: {fileID: 2635900548373629414, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.r
-      value: 0.9056604
-      objectReference: {fileID: 0}
-    - target: {fileID: 2635900548373629414, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.b
-      value: 0.34603062
-      objectReference: {fileID: 0}
-    - target: {fileID: 2635900548373629414, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.g
-      value: 0.6581315
-      objectReference: {fileID: 0}
-    - target: {fileID: 2635900548373629414, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.r
-      value: 0.9056604
-      objectReference: {fileID: 0}
-    - target: {fileID: 5496613773344693985, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.b
-      value: 0.34603062
-      objectReference: {fileID: 0}
-    - target: {fileID: 5496613773344693985, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.g
-      value: 0.6581315
-      objectReference: {fileID: 0}
-    - target: {fileID: 5496613773344693985, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.r
-      value: 0.9056604
-      objectReference: {fileID: 0}
-    - target: {fileID: 5496613773344693985, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.b
-      value: 0.34603062
-      objectReference: {fileID: 0}
-    - target: {fileID: 5496613773344693985, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.g
-      value: 0.6581315
-      objectReference: {fileID: 0}
-    - target: {fileID: 5496613773344693985, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.r
-      value: 0.9056604
-      objectReference: {fileID: 0}
-    - target: {fileID: 9207627824084795617, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.b
-      value: 0.34603062
-      objectReference: {fileID: 0}
-    - target: {fileID: 9207627824084795617, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.g
-      value: 0.6581315
-      objectReference: {fileID: 0}
-    - target: {fileID: 9207627824084795617, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.r
-      value: 0.9056604
-      objectReference: {fileID: 0}
-    - target: {fileID: 9207627824084795617, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.b
-      value: 0.34603062
-      objectReference: {fileID: 0}
-    - target: {fileID: 9207627824084795617, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.g
-      value: 0.6581315
-      objectReference: {fileID: 0}
-    - target: {fileID: 9207627824084795617, guid: 5b90f45aa803c4c448e7d7409a67e7ee,
-        type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.r
-      value: 0.9056604
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1482,7 +1392,6 @@ MonoBehaviour:
   minCamFOV: 50
   maxCamFOV: 60
   midAirCamFOV: 70
-  xFactor: 4
   minSpeedlinesEmission: -5
   maxSpeedlinesEmission: 20
   midairSpeedlinesExtraEmissionCount: 10
@@ -2028,8 +1937,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: RESTART
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
-  m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

@@ -5,6 +5,9 @@ using UnityEngine;
 public class WeatherManager : MonoBehaviour
 {
 
+    public GameObject snowParticlePrefab;
+    public Transform playerTransform;
+
     public WeatherState CurrentWeather
     {
         get => m_CurrentState;
@@ -39,15 +42,16 @@ public class WeatherManager : MonoBehaviour
     }
 
 
+    Vector3 lastPos;
+
+
     #region Snow
     void OnSnow()
     {
-
     }
 
     void SnowBehavior()
     {
-
     }
     #endregion
 
