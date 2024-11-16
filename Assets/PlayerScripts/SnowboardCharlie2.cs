@@ -1,11 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.GraphicsBuffer;
 
 public class SnowboardCharlie2 : MonoBehaviour
 {
@@ -25,7 +19,8 @@ public class SnowboardCharlie2 : MonoBehaviour
     public Rigidbody rb;
     private float currentAutoSpeed;
     public Vector3 rbv;
-    private TrailRenderer trailRenderer;
+    public TrailRenderer thickTrail;
+    public TrailRenderer thinTrail;
     public PlayerState CurrentState
     {
         get => m_CurrentState;
@@ -79,7 +74,6 @@ public class SnowboardCharlie2 : MonoBehaviour
         manager.Setup(rb);
         currentAutoSpeed = autoSpeed;
         CurrentState = PlayerState.Midair;
-        trailRenderer = GetComponentInChildren<TrailRenderer>();
     }
     float xInput;
     float yInput;
@@ -109,6 +103,7 @@ public class SnowboardCharlie2 : MonoBehaviour
     }
 
     private void OnGrounded() {
+        thinTrail.emitting = true;
         manager.ScoreTrick(false);
         AudioManager audioManager = FindObjectOfType<AudioManager>();
         audioManager.FadeIn("Background", .2f);
@@ -120,25 +115,31 @@ public class SnowboardCharlie2 : MonoBehaviour
         // Get player input for movement
         if (yInput < 0) {
             if (xInput != 0 && yInput < 0 && currGroundState != GroundState.Carving) {
+                setTrailThick(true);
                 currGroundState = GroundState.Carving;
                 stateTimeCounter = 0;
             } else if (xInput == 0) {
+                setTrailThick(false);
                 currGroundState = GroundState.Straightening;
                 stateTimeCounter = 0;
             }
         } else if (yInput == 0) {
             if (xInput != 0 && currGroundState != GroundState.Drifting){
+                setTrailThick(true);
                 currGroundState = GroundState.Drifting;
                 stateTimeCounter = 0;
             } else if (xInput == 0 && currGroundState != GroundState.Sliding) {
+                setTrailThick(false);
                 currGroundState = GroundState.Sliding;
                 stateTimeCounter = 0;
             }
         } else if (yInput > 0) {
             if (xInput != 0 && currGroundState != GroundState.Shortturning) {
+                setTrailThick(true);
                 currGroundState = GroundState.Shortturning;
                 stateTimeCounter = 0;
             } else if (xInput == 0 && currGroundState != GroundState.Sliding) {
+                setTrailThick(false);
                 currGroundState = GroundState.Sliding;
                 stateTimeCounter = 0;
             }
@@ -173,6 +174,8 @@ public class SnowboardCharlie2 : MonoBehaviour
 
     private void OnMidair()
     {
+        thinTrail.emitting = false;
+        thickTrail.emitting = false;
         manager.ScoreTrick(true);
         AudioManager audioManager = FindObjectOfType<AudioManager>();
         audioManager.FadeOut("Background", .2f);
@@ -301,5 +304,19 @@ public class SnowboardCharlie2 : MonoBehaviour
             rb.velocity += Mathf.Abs(Mathf.Cos(angle)) * transform.forward * Time.fixedDeltaTime * currentAutoSpeed;
         }
     }
-    
+
+    private void setTrailThick(bool thick)
+    {
+        if (thick)
+        {
+            thinTrail.emitting = false;
+            thickTrail.emitting = true;
+        }
+        else
+        {
+            thickTrail.emitting = false;
+            thinTrail.emitting = true;
+        }
+    }
+
 }
