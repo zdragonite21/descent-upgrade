@@ -8,6 +8,9 @@ public class WeatherManager : MonoBehaviour
     public GameObject snowParticlePrefab;
     public Transform playerTransform;
 
+    public GameObject[] weatherObjects;
+
+    
     public WeatherState CurrentWeather
     {
         get => m_CurrentState;
