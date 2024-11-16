@@ -27,8 +27,6 @@ public class CameraMovement : MonoBehaviour
     public Transform camTransform;
     public Camera cameraValues;
 
-    public Rigidbody rb;
-
     public ParticleSystem speedlines;
 
     public Animator camAnimator;
@@ -96,7 +94,7 @@ public class CameraMovement : MonoBehaviour
     private void Update()
     {
 
-        vectorToTarget = (target.position - this.rb.position);
+        vectorToTarget = (target.position - this.transform.position);
         distanceToTarget = vectorToTarget.magnitude;
 
         m_UpdateHandler?.Invoke();
@@ -111,7 +109,7 @@ public class CameraMovement : MonoBehaviour
         // Scale the moveVel by the xFactor in the rightward direction to make x-axis adjust more
         float x = Vector3.Dot(Vector3.right, vectorToTarget);
 
-        vectorToTarget = (target.position - this.rb.position);
+        vectorToTarget = (target.position - this.transform.position);
         distanceToTarget = vectorToTarget.magnitude;
 
         Vector3 moveVel = Time.deltaTime * maxMovementSpeed * Mathf.Lerp(0f,
@@ -122,10 +120,10 @@ public class CameraMovement : MonoBehaviour
         // Cap max distance
         if (distanceToTarget > maxDistance)  //Using sqrmag is more performant
         {
-            this.rb.position = target.position - vectorToTarget.normalized * maxDistance;
+            this.transform.position = target.position - vectorToTarget.normalized * maxDistance;
         }
 
-        rb.velocity = moveVel;
+        transform.position += moveVel;
 
     }
 
@@ -249,7 +247,7 @@ public class CameraMovement : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        rb.position += new Vector3(0f, Time.deltaTime, 0f);
+        transform.position += new Vector3(0f, Time.deltaTime, 0f);
 
         print("HI");
     }
