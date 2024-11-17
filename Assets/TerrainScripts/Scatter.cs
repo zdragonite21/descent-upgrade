@@ -27,6 +27,8 @@ public class Scatter : MonoBehaviour
     public Vector2 scaleRangeR = new Vector2(0.8f, 1.2f);
     public float probMapStrength = 2f;
 
+    public float treeTilt = -20f;
+
     public Transform treeParent;
 
     private void Start()
@@ -112,7 +114,8 @@ public class Scatter : MonoBehaviour
         Vector3 worldPosition = parentTransform.TransformPoint(vertex + Vector3.up * UnityEngine.Random.Range(heightRangeT.x, heightRangeT.y));
         tree.transform.position = worldPosition;
 
-        Quaternion worldRotation = parentTransform.rotation * Quaternion.identity;
+        Quaternion worldRotation = parentTransform.rotation * Quaternion.Euler(treeTilt,0f,0f);
+        
         tree.transform.rotation = worldRotation;
 
         float randomScale = UnityEngine.Random.Range(scaleRangeT.x, scaleRangeT.y) * globalScale;
