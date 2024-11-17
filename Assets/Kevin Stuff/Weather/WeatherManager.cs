@@ -10,6 +10,7 @@ public class WeatherManager : MonoBehaviour
     public Vector3 spawnOffset = new Vector3(0f, 15f, 100f); 
 
     public GameObject snowParticlePrefab;
+    public GameObject sandParticlePrefab;
     public Transform playerTransform;
 
     
@@ -80,7 +81,12 @@ public class WeatherManager : MonoBehaviour
 
     void SandBehavior()
     {
-
+        if ((playerTransform.position - lastPos).sqrMagnitude > distanceBeforeSpawning * distanceBeforeSpawning)
+        {
+            GameObject newSnow = Instantiate(sandParticlePrefab, playerTransform.position + spawnOffset, Quaternion.identity);
+            newSnow.GetComponent<DestroyWhenFarFromTarget>().target = playerTransform;
+            lastPos = playerTransform.position;
+        }
     }
     #endregion
 

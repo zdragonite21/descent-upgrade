@@ -1011,8 +1011,17 @@ ParticleSystem:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
+          time: 0.58810335
+          value: 0.4424496
+          inSlope: 0.668704
+          outSlope: 0.668704
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.28744316
+        - serializedVersion: 3
           time: 1
-          value: 0.24865022
+          value: 0.06486574
           inSlope: -2.5221393
           outSlope: -2.5221393
           tangentMode: 0
@@ -3647,7 +3656,7 @@ ParticleSystem:
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.6
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -3700,7 +3709,7 @@ ParticleSystem:
     m_Bounce:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.05
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -3753,7 +3762,7 @@ ParticleSystem:
     m_EnergyLossOnCollision:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.2
       minScalar: 0
       maxCurve:
         serializedVersion: 2

@@ -44,8 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cbf085c13b4dca44b45a3eb02c4fe26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startState: 1
   distanceBeforeSpawning: 50
   spawnOffset: {x: 0, y: 15, z: 100}
   snowParticlePrefab: {fileID: 3396732846568769013, guid: f7eeb95af92821b46b63d9a1e9bb4358,
+    type: 3}
+  sandParticlePrefab: {fileID: 3396732846568769013, guid: 982035e8716c92a4682e31609683c92b,
     type: 3}
   playerTransform: {fileID: 0}

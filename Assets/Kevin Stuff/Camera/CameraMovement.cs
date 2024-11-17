@@ -131,7 +131,7 @@ public class CameraMovement : MonoBehaviour
     {
         Quaternion targetRotation = Quaternion.Euler(target.transform.rotation.eulerAngles.x - 20f, 0f, 0f);
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10f * Time.deltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 20f * Time.deltaTime);
     }
 
     private void OnGrounded()
@@ -245,9 +245,9 @@ public class CameraMovement : MonoBehaviour
 
 
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerStay(Collider collision)
     {
-        transform.position += new Vector3(0f, Time.deltaTime, 0f);
+        //transform.position += new Vector3(0f, 10f * Time.deltaTime, 0f);
 
         print("HI");
     }
