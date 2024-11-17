@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WeatherManager : MonoBehaviour
 {
+    public WeatherState startState;
     public float distanceBeforeSpawning;
 
     public Vector3 spawnOffset = new Vector3(0f, 15f, 100f); 
@@ -50,7 +51,7 @@ public class WeatherManager : MonoBehaviour
 
     private void Start()
     {
-        CurrentWeather = WeatherState.Snow;
+        CurrentWeather = startState;
     }
 
 
