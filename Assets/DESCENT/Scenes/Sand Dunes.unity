@@ -7466,6 +7466,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 416373323654926826, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 810d89c712af84c44b12a3a9883fd8be, type: 2}
+    - target: {fileID: 416373323654926826, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1ef80da32f052834e8bca90e40ee3a69, type: 2}
+    - target: {fileID: 654283605478953600, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1ef80da32f052834e8bca90e40ee3a69, type: 2}
+    - target: {fileID: 654283605478953600, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: d10643f5d5d046540b9305d249d44f6e, type: 2}
+    - target: {fileID: 654283605478953600, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0815c5957b20c0b499c10e602bb446d7, type: 2}
     - target: {fileID: 1072223782639069871, guid: e6b53f5daab214771ad77c653dc3f8c1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7516,16 +7541,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1154568478652442836, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0815c5957b20c0b499c10e602bb446d7, type: 2}
+    - target: {fileID: 1601574619012077415, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 006f1354968b6e54e82a70df86da387b, type: 2}
     - target: {fileID: 1991179431118718385, guid: e6b53f5daab214771ad77c653dc3f8c1,
         type: 3}
       propertyPath: cameraMovement
       value: 
       objectReference: {fileID: 921326019}
+    - target: {fileID: 3735817503132223923, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0815c5957b20c0b499c10e602bb446d7, type: 2}
     - target: {fileID: 6253937640072739063, guid: e6b53f5daab214771ad77c653dc3f8c1,
         type: 3}
       propertyPath: m_Name
       value: Player Anim
       objectReference: {fileID: 0}
+    - target: {fileID: 7389798424585513219, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0815c5957b20c0b499c10e602bb446d7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
