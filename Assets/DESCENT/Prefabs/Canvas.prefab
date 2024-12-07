@@ -187,6 +187,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsText: {fileID: 622508965558774274}
+  mainGameSceneName: Bryan 2
+  sandGameSceneName: Sand Dunes
 --- !u!1 &2013659186271887444
 GameObject:
   m_ObjectHideFlags: 0

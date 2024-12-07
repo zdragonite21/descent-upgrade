@@ -113,7 +113,7 @@ public class SnowboardCharlie2 : MonoBehaviour
         AudioManager audioManager = FindObjectOfType<AudioManager>();
         audioManager.FadeIn("Background", .2f);
         audioManager.FadeOut("Strong Wind", 0.1f);
-        print("Ground");
+
     }
     private void GroundedBehavior()
     {
@@ -194,7 +194,7 @@ public class SnowboardCharlie2 : MonoBehaviour
         rb.velocity += 1.5f * Vector3.down * gravityScale * Time.fixedDeltaTime;
         rb.velocity += transform.right * xInput * sideLeanForce * Time.fixedDeltaTime * 0.5f;
         float maxAngVel = 3f;  
-        print(rb.angularVelocity.magnitude + " " + maxAngVel);
+
 
         if (Time.time < airTimeStart + 0.3f) {
             rb.AddTorque(transform.up * airSommersault * xInput * initTrickForce, ForceMode.Impulse);
@@ -205,15 +205,11 @@ public class SnowboardCharlie2 : MonoBehaviour
         }
         
         if (rb.angularVelocity.magnitude > maxAngVel) {
-            print(rb.angularVelocity);
             Vector3 angularV = Vector3.Normalize(rb.angularVelocity);
-            print(angularV);
-            print(maxAngVel * angularV);
             rb.angularVelocity = maxAngVel * angularV;
         }
         
     }
-
     private void MidairBehavior() {
         
     }
@@ -313,8 +309,14 @@ public class SnowboardCharlie2 : MonoBehaviour
         rb.velocity += directionalForce * Vector3.down * Time.fixedDeltaTime;
         // Horizontal "Gravity" to make the player go up slopes
         if (Mathf.Sin(angle) < 0)
-        {
-            rb.velocity += Mathf.Abs(Mathf.Cos(angle)) * transform.forward * Time.fixedDeltaTime * currentAutoSpeed;
+        {   
+            Vector3 forward = new Vector3();
+            if (transform.forward.z < 0) {
+                forward = new Vector3 (transform.forward.x, transform.forward.y, -1 * transform.forward.z);
+            } else {
+                forward = transform.forward;
+            }   
+            rb.velocity += Mathf.Abs(Mathf.Cos(angle)) * forward * Time.fixedDeltaTime * currentAutoSpeed;
         }
     }
 

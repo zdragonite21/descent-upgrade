@@ -11185,7 +11185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerRB: {fileID: 7230607631617418342}
   death: {fileID: 5954541937583294980}
-  dyingFloat: 15
+  dyingFloat: 30
 --- !u!33 &4521924924174084007
 MeshFilter:
   m_ObjectHideFlags: 0

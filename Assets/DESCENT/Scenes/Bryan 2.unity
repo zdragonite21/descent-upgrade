@@ -1853,7 +1853,7 @@ PrefabInstance:
     - target: {fileID: 7586651413656785760, guid: e6b53f5daab214771ad77c653dc3f8c1,
         type: 3}
       propertyPath: dyingFloat
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8555560249573640151, guid: e6b53f5daab214771ad77c653dc3f8c1,
         type: 3}
