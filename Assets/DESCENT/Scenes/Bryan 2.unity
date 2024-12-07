@@ -589,6 +589,7 @@ MonoBehaviour:
   scaleRangeT: {x: 0.5, y: 2.5}
   scaleRangeR: {x: 0.8, y: 1.2}
   probMapStrength: 2
+  treeTilt: -20
   treeParent: {fileID: 2071007809}
 --- !u!114 &921326019 stripped
 MonoBehaviour:
@@ -1839,6 +1840,16 @@ PrefabInstance:
       propertyPath: m_Drag
       value: 0.15
       objectReference: {fileID: 0}
+    - target: {fileID: 7230607631617418342, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230607631617418342, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 7586651413656785760, guid: e6b53f5daab214771ad77c653dc3f8c1,
         type: 3}
       propertyPath: dyingFloat
@@ -1846,8 +1857,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8555560249573640151, guid: e6b53f5daab214771ad77c653dc3f8c1,
         type: 3}
+      propertyPath: airSpinSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8555560249573640151, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
       propertyPath: tiltingFactor
-      value: 20
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8555560249573640151, guid: e6b53f5daab214771ad77c653dc3f8c1,
+        type: 3}
+      propertyPath: airSommersault
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8555560249573640151, guid: e6b53f5daab214771ad77c653dc3f8c1,
         type: 3}

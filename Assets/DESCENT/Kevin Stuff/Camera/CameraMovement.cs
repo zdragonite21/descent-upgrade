@@ -248,8 +248,6 @@ public class CameraMovement : MonoBehaviour
     private void OnTriggerStay(Collider collision)
     {
         //transform.position += new Vector3(0f, 10f * Time.deltaTime, 0f);
-
-        print("HI");
     }
 }
 

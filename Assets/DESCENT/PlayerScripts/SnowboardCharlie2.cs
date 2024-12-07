@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class SnowboardCharlie2 : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class SnowboardCharlie2 : MonoBehaviour
     public float tiltingFactor;
     public float gravityScale;
     public float jumpForce;
+    public float initTrickForce;
     public float airSpinSpeed;
     public float airSommersault;
     public float rotationAdjustionFactor;
@@ -37,6 +39,7 @@ public class SnowboardCharlie2 : MonoBehaviour
                 case PlayerState.Midair:
                     OnMidair();
                     m_UpdateHandler = MidairBehavior;
+                    m_FixedUpdateHandler = FixedMidairBehavior;
                     break;
                 default:
                     break;
@@ -91,7 +94,6 @@ public class SnowboardCharlie2 : MonoBehaviour
             animCrouchBlend = Mathf.Lerp(animCrouchBlend, 0f, 7f * Time.deltaTime);
         if (animator != null)
             animator.SetFloat("CrouchBlend", animCrouchBlend);
-
         // Gravity
         xInput = Input.GetAxis("Horizontal");
         yInput = Input.GetAxis("Vertical");
@@ -104,15 +106,17 @@ public class SnowboardCharlie2 : MonoBehaviour
     }
 
     private void OnGrounded() {
+        rb.angularDrag = 0.2f;
+        rb.freezeRotation = true;
         thinTrail.emitting = true;
         manager.ScoreTrick(false);
         AudioManager audioManager = FindObjectOfType<AudioManager>();
         audioManager.FadeIn("Background", .2f);
-        audioManager.FadeOut("Strong Wind", .1f);
+        audioManager.FadeOut("Strong Wind", 0.1f);
+        print("Ground");
     }
     private void GroundedBehavior()
     {
-        //print("IN Ground");
         // Get player input for movement
         if (yInput < 0) {
             if (xInput != 0 && yInput < 0 && currGroundState != GroundState.Carving) {
@@ -149,7 +153,6 @@ public class SnowboardCharlie2 : MonoBehaviour
         AlignTerrain();
 
         // Jumps
-        
         if (Input.GetKeyUp(KeyCode.Space))
         {
             float jumpFactor = 1;
@@ -157,7 +160,6 @@ public class SnowboardCharlie2 : MonoBehaviour
                 jumpFactor = 1 + stateTimeCounter * 0.01f;
             }
             rb.AddForce(new Vector3(0f, jumpForce * jumpFactor * 10f, 0f), ForceMode.Impulse);
-            //print(jumpFactor);
             animCrouchBlend = 0f;
         }
     }
@@ -175,31 +177,47 @@ public class SnowboardCharlie2 : MonoBehaviour
 
     private void OnMidair()
     {
+        rb.freezeRotation = false;
+        rb.angularDrag = 0f;
         thinTrail.emitting = false;
         thickTrail.emitting = false;
         manager.ScoreTrick(true);
         AudioManager audioManager = FindObjectOfType<AudioManager>();
         audioManager.FadeOut("Background", .2f);
-        audioManager.FadeIn("Strong Wind", .1f);
-        rb.AddTorque(transform.up * airSommersault * xInput * tiltingFactor * 10f, ForceMode.Impulse);
-        rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 10f, ForceMode.Impulse);
-        
+        audioManager.FadeIn("Strong Wind", 0.1f);
+        airTimeStart = Time.time;
+        // rb.AddTorque(transform.up * airSommersault * xInput * tiltingFactor * 100f, ForceMode.Impulse);
+        // rb.AddTorque(transform.right * airSpinSpeed * yInput * tiltingFactor * 100f, ForceMode.Impulse);
     }
-    private void MidairBehavior()
+    private void FixedMidairBehavior()
     {
-        //print("IN AIR");
-        rb.velocity += 1.5f * Vector3.down * gravityScale * Time.deltaTime;
-        rb.velocity += transform.right * xInput * sideLeanForce * Time.deltaTime * 0.5f;
+        rb.velocity += 1.5f * Vector3.down * gravityScale * Time.fixedDeltaTime;
+        rb.velocity += transform.right * xInput * sideLeanForce * Time.fixedDeltaTime * 0.5f;
+        float maxAngVel = 3f;  
+        print(rb.angularVelocity.magnitude + " " + maxAngVel);
 
-        Quaternion targetRotation = Quaternion.FromToRotation(transform.forward, rb.velocity) * transform.rotation;
-        rb.rotation = Quaternion.Lerp(transform.rotation, targetRotation,
-            Time.fixedDeltaTime * tiltingFactor * 0.5f);
-        float maxAngVel = 7f;
-        rb.AddTorque(transform.right * yInput * airSpinSpeed * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.x) / maxAngVel, ForceMode.VelocityChange);
-        rb.AddTorque(transform.up * xInput * airSommersault * Time.fixedDeltaTime * (maxAngVel - rb.angularVelocity.y) / maxAngVel, ForceMode.VelocityChange);
-    
+        if (Time.time < airTimeStart + 0.3f) {
+            rb.AddTorque(transform.up * airSommersault * xInput * initTrickForce, ForceMode.Impulse);
+            rb.AddTorque(transform.right * airSpinSpeed * yInput * initTrickForce, ForceMode.Impulse);  
+        } else {
+            rb.AddTorque(transform.up * airSommersault * xInput, ForceMode.Impulse);
+            rb.AddTorque(transform.right * airSpinSpeed * yInput, ForceMode.Impulse);  
+        }
+        
+        if (rb.angularVelocity.magnitude > maxAngVel) {
+            print(rb.angularVelocity);
+            Vector3 angularV = Vector3.Normalize(rb.angularVelocity);
+            print(angularV);
+            print(maxAngVel * angularV);
+            rb.angularVelocity = maxAngVel * angularV;
+        }
         
     }
+
+    private void MidairBehavior() {
+        
+    }
+
     private void AlignTerrain()
     {
         if (Physics.Raycast(transform.position + transform.forward, Vector3.down, out RaycastHit hitInfo, 5f, playerGrounded.layerMask))
@@ -237,7 +255,6 @@ public class SnowboardCharlie2 : MonoBehaviour
                 groundTargetRotation = Quaternion.FromToRotation(transform.up, normal2) * transform.rotation;
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, tiltingFactor * Time.fixedDeltaTime);
-            //transform.rotation = Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
         }
         if (currGroundState == GroundState.Drifting) {
@@ -247,11 +264,7 @@ public class SnowboardCharlie2 : MonoBehaviour
                 groundTargetRotation = Quaternion.FromToRotation(transform.up, normal2) * transform.rotation;
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, tiltingFactor * Time.fixedDeltaTime);
-            //transform.rotation = Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
-        //     groundTargetRotation = Quaternion.FromToRotation(transform.TransformDirection(1, 1, 0), normal2) * transform.rotation;
-        //     transform.rotation = Quaternion.Slerp(transform.rotation, groundTargetRotation, rotationAdjustionFactor * Time.fixedDeltaTime);
-        //     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(groundTargetRotation.x, 90 * xInput, groundTargetRotation.z), Time.fixedDeltaTime * tiltingFactor);
             }
         if (currGroundState == GroundState.Shortturning) {
             groundTargetRotation = Quaternion.FromToRotation(transform.TransformDirection(-0.75f * xInput, 1, 0), hitInfo.normal) * transform.rotation;

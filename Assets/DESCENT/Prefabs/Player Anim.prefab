@@ -11154,11 +11154,12 @@ MonoBehaviour:
   autoSpeed: 12
   fasterAutoSpeed: 24
   sideLeanForce: 10
-  tiltingFactor: 3
+  tiltingFactor: 4
   gravityScale: 20
   jumpForce: 15
-  airSpinSpeed: 8
-  airSommersault: 3.5
+  initTrickForce: 5
+  airSpinSpeed: 4
+  airSommersault: 2
   rotationAdjustionFactor: 10
   airTimeStart: 0
   animator: {fileID: 4527847146806445427}
