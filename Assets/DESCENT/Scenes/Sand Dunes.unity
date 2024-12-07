@@ -887,12 +887,13 @@ MonoBehaviour:
   lRockDist: 0.431
   sRockDist: 0.632
   scatterChance: 0.07
-  globalScale: 1
+  globalScale: 1.5
   heightRangeT: {x: -1, y: 0}
   heightRangeR: {x: 1, y: 2}
   scaleRangeT: {x: 1.5, y: 3.5}
   scaleRangeR: {x: 0.8, y: 1.2}
   probMapStrength: 4
+  treeTilt: -20
   treeParent: {fileID: 0}
 --- !u!1 &705477739
 GameObject:

@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/Sand Dunes.unity
+    path: Assets/DESCENT/Scenes/Sand Dunes.unity
     guid: 8eac6134014855c40a86bf138a1ff8b8
   m_configObjects: {}
