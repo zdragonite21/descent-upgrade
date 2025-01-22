@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/DESCENT/Scenes/Sand Dunes.unity
     guid: 8eac6134014855c40a86bf138a1ff8b8
+  - enabled: 1
+    path: Assets/DESCENT/Scenes/Bryan 2.unity
+    guid: 5349bb1ccff8b4f64a6de1bc97276255
   m_configObjects: {}

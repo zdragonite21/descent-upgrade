@@ -17,8 +17,9 @@ public class GameOverScreen : MonoBehaviour
     }
 
     public void Restart() {
-        int scene = UnityEngine.Random.Range(0,2);
-        if (scene == 0) {
+        float scene = UnityEngine.Random.value;
+
+        if (scene > 0.5) {
             SceneManager.LoadScene(mainGameSceneName);
         } else {
             SceneManager.LoadScene(sandGameSceneName);
